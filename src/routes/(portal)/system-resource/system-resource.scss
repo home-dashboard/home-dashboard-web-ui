@@ -1,0 +1,36 @@
+$dashboard-row-margin: 8px;
+$dashboard-tile-padding: 16px;
+
+$dashboard-chart-base-height: 80px;
+$dashboard-chart-height: $dashboard-chart-base-height * 4;
+
+.system-resource-container {
+  .chart-tile {
+    height: $dashboard-chart-height;
+  }
+
+  .chart {
+    height: 100%;
+  }
+
+  //.half-chart-tile {
+  //  height: $dashboard-chart-base-height * 2 - $dashboard-row-margin;
+  //}
+
+  //.cds--css-grid,
+  //.cds--subgrid {
+  //  grid-row-gap: $dashboard-row-margin * 2;
+  //}
+
+  .expandable-chart-tile {
+    //height: $dashboard-chart-height * 2 + $dashboard-row-margin * 2;
+  }
+
+  .expandable-chart {
+    height: $dashboard-chart-height - $dashboard-tile-padding * 2;
+  }
+
+  //.expandable-chart__extra {
+  //  height: $dashboard-chart-height + $dashboard-row-margin * 2;
+  //}
+}

@@ -1,0 +1,15 @@
+{
+  "printWidth": 100,
+  "plugins": ["prettier-plugin-svelte"],
+  "pluginSearchDirs": ["."],
+  "svelteStrictMode": true,
+  "svelteAllowShorthand": false,
+  "overrides": [
+    {
+      "files": "*.svelte",
+      "options": {
+        "parser": "svelte"
+      }
+    }
+  ]
+}
