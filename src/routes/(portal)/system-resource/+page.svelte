@@ -9,10 +9,11 @@
     ProcessRealtimeCpuUsageChart,
   } from "../../../lib/components/charts";
   import { Column, ExpandableTile, Grid, Row, Tile } from "carbon-components-svelte";
-  import "./system-resource.scss";
   import { modifyCollectStat } from "../../../lib/http-interface/server-send-event";
   import { mounted } from "../../../lib/stores/lifecycle";
   import { debounce } from "@siaikin/utils";
+
+  import "./+page.scss";
 
   const isMounted = mounted();
 
@@ -53,55 +54,53 @@
 <Grid fullWidth padding noGutter class="system-resource-container">
   <Row>
     <Column sm="{4}" md="{8}" lg="{8}">
-      <ExpandableTile class="expandable-chart-tile">
+      <ExpandableTile>
         <svelte:fragment slot="above">
-          <RealtimeNetworkIoChart class="expandable-chart" />
+          <RealtimeNetworkIoChart class="dashboard-chart" />
         </svelte:fragment>
         <svelte:fragment slot="below">
-          <RealtimeNetworkIoChart class="expandable-chart" />
+          <RealtimeNetworkIoChart class="dashboard-chart" />
         </svelte:fragment>
       </ExpandableTile>
     </Column>
 
     <Column sm="{4}" md="{4}" lg="{4}">
       <ExpandableTile
-        class="expandable-chart-tile"
         expanded="{expandStates[0]}"
         on:click="{(event) => handleChartClick(event, 0)}"
       >
         <svelte:fragment slot="above">
-          <RealtimeMemoryChart class="expandable-chart" />
+          <RealtimeMemoryChart class="dashboard-chart" />
         </svelte:fragment>
         <svelte:fragment slot="below">
-          <ProcessRealtimeMemoryUsageChart class="expandable-chart" />
+          <ProcessRealtimeMemoryUsageChart class="dashboard-chart" />
         </svelte:fragment>
       </ExpandableTile>
     </Column>
 
     <Column sm="{4}" md="{4}" lg="{4}">
       <ExpandableTile
-        class="expandable-chart-tile"
         expanded="{expandStates[1]}"
         on:click="{(event) => handleChartClick(event, 1)}"
       >
         <svelte:fragment slot="above">
-          <RealtimeCpuChart class="expandable-chart" />
+          <RealtimeCpuChart class="dashboard-chart" />
         </svelte:fragment>
         <svelte:fragment slot="below">
-          <ProcessRealtimeCpuUsageChart class="expandable-chart" />
+          <ProcessRealtimeCpuUsageChart class="dashboard-chart" />
         </svelte:fragment>
       </ExpandableTile>
     </Column>
 
     <Column sm="{4}" md="{8}" lg="{8}">
-      <Tile class="chart-tile">
-        <RealtimeDiskIoChart class="chart" />
+      <Tile>
+        <RealtimeDiskIoChart class="dashboard-chart" />
       </Tile>
     </Column>
 
     <Column sm="{4}" md="{4}" lg="{4}">
-      <Tile class="chart-tile">
-        <RealtimeDiskChart class="chart" />
+      <Tile>
+        <RealtimeDiskChart class="dashboard-chart" />
       </Tile>
     </Column>
   </Row>

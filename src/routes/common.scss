@@ -1,0 +1,9 @@
+$dashboard-row-margin: 8px;
+$dashboard-tile-padding: 16px;
+
+$dashboard-chart-base-height: 80px;
+$dashboard-chart-height: $dashboard-chart-base-height * 4;
+
+.dashboard-chart {
+  height: $dashboard-chart-height - $dashboard-tile-padding * 2;
+}

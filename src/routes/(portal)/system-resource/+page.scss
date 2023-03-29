@@ -1,12 +1,8 @@
-$dashboard-row-margin: 8px;
-$dashboard-tile-padding: 16px;
-
-$dashboard-chart-base-height: 80px;
-$dashboard-chart-height: $dashboard-chart-base-height * 4;
+@use "../../common";
 
 .system-resource-container {
   .chart-tile {
-    height: $dashboard-chart-height;
+    height: common.$dashboard-chart-height;
   }
 
   .chart {
@@ -27,7 +23,7 @@ $dashboard-chart-height: $dashboard-chart-base-height * 4;
   }
 
   .expandable-chart {
-    height: $dashboard-chart-height - $dashboard-tile-padding * 2;
+    height: common.$dashboard-chart-height - common.$dashboard-tile-padding * 2;
   }
 
   //.expandable-chart__extra {
