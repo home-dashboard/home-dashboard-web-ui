@@ -10,7 +10,7 @@
   } from "../../../lib/components/charts";
   import { Column, ExpandableTile, Grid, Row, Tile } from "carbon-components-svelte";
   import { modifyCollectStat } from "../../../lib/http-interface/server-send-event";
-  import { mounted } from "../../../lib/stores/lifecycle";
+  import { mounted } from "../../../lib/stores";
   import { debounce } from "@siaikin/utils";
 
   import "./+page.scss";
