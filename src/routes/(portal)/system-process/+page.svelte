@@ -8,7 +8,6 @@
     Grid,
     Row,
     Tile,
-    FormGroup,
     Form,
     Slider,
     Select,
@@ -18,7 +17,7 @@
   import { debounce } from "@siaikin/utils";
   import { mounted } from "../../../lib/stores/lifecycle";
 
-  import "./system-process.scss";
+  import "./+page.scss";
 
   const isMounted = mounted();
   const handleModifyProcessCollectStat = debounce(
@@ -48,16 +47,17 @@
     <!--    <FormGroup legendText="Refresh interval (S)">-->
     <!--      <Slider min="{1}" max="{60}" bind:value="{controlFormData.refreshInterval}" />-->
     <!--    </FormGroup>-->
-    <FormGroup legendText="{`Top ${controlFormData.refreshInterval}`}">
-      <Slider min="{1}" max="{60}" bind:value="{controlFormData.refreshInterval}" />
-    </FormGroup>
-    <FormGroup legendText="Sort by">
-      <Select bind:selected="{controlFormData.sortBy}">
-        <SelectItem value="memoryUsage" text="Memory usage" />
-        <SelectItem value="cpuUsage" text="Cpu usage" />
-        <SelectItem value="networkUsage" text="Network usage" />
-      </Select>
-    </FormGroup>
+    <Slider
+      labelText="{`Top ${controlFormData.refreshInterval}`}"
+      min="{1}"
+      max="{60}"
+      bind:value="{controlFormData.refreshInterval}"
+    />
+    <Select labelText="Sort by" bind:selected="{controlFormData.sortBy}">
+      <SelectItem value="memoryUsage" text="Memory usage" />
+      <SelectItem value="cpuUsage" text="Cpu usage" />
+      <SelectItem value="networkUsage" text="Network usage" />
+    </Select>
   </Form>
 
   <Grid fullWidth padding noGutter class="chart-container">

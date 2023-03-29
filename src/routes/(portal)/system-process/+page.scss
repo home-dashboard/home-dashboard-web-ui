@@ -10,12 +10,8 @@ $dashboard-chart-height: $dashboard-chart-base-height * 4;
 
     column-gap: 0.5rem;
 
-    .bx--fieldset {
-      margin-bottom: 0;
-    }
-
-    .bx--label {
-      margin-bottom: 0;
+    .bx--form-item {
+      flex: 0 0 auto;
     }
   }
 
