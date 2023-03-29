@@ -1,9 +1,13 @@
 <script lang="ts">
   import { BarChartSimple } from "@carbon/charts-svelte";
   import BaseProcessRealtimeChart from "./base-process-realtime-chart.svelte";
-  import type { FormattedProcessRealtimeStat } from "../../http-interface/server-send-event";
+  import type { FormattedProcessRealtimeStat } from "../../../http-interface/server-send-event";
+  import { interfaces } from "@carbon/charts";
+  import { deepMerge } from "@siaikin/utils";
 
-  function getChartProps({ processes, cpuUsage }: FormattedProcessRealtimeStat) {
+  export let options: interfaces.BarChartOptions = {};
+
+  function getChartProps({ processes, memoryUsage }: FormattedProcessRealtimeStat) {
     const data = [];
 
     /**
@@ -13,20 +17,24 @@
       const proc = processes[i];
       data.push({
         group: proc.name,
-        value: proc.cpuPercent,
+        value: proc.memoryPercent,
       });
     }
 
-    const options = {
+    const _options: interfaces.BarChartOptions = {
       resizable: true,
       toolbar: { enabled: false },
+      tooltip: {
+        showTotal: true,
+        totalLabel: "ASD",
+      },
       axes: {
         left: {
           mapsTo: "group",
-          scaleType: "labels",
+          scaleType: interfaces.ScaleTypes.LABELS,
         },
         bottom: {
-          title: "cpu usage(%)",
+          title: "memory usage(%)",
           mapsTo: "value",
           percentage: true,
           thresholds:
@@ -34,8 +42,8 @@
               ? []
               : [
                   {
-                    value: cpuUsage,
-                    label: "total cpu usage",
+                    value: memoryUsage,
+                    label: "total memory usage",
                     fillColor: "#da1e28",
                   },
                 ],
@@ -49,7 +57,7 @@
 
     return {
       data,
-      options,
+      options: deepMerge(_options, options),
     };
   }
 </script>

@@ -2,7 +2,7 @@
   import { BarChartStacked } from "@carbon/charts-svelte";
   import BaseChartChart from "./base-realtime-chart.svelte";
 
-  import { ChartRealtimeStat } from "../../stores/chart-realtime-stat-sotre";
+  import { ChartRealtimeStat } from "../../../stores/chart-realtime-stat-sotre";
   import { filesize } from "filesize";
 
   function getChartProps(stat: Pick<ChartRealtimeStat, "disk">) {
