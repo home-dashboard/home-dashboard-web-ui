@@ -31,7 +31,7 @@
 
     await loginPromise;
 
-    await goto("/dashboard", { replaceState: true });
+    await goto("/", { replaceState: true });
   }
 </script>
 
