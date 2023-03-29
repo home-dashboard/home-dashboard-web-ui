@@ -17,9 +17,10 @@
   import { Wakapi } from "../../lib/third-party";
   import { formatDuration } from "../../lib/utils/format-duration";
   import { ConfigurationStore as configuration, mounted } from "../../lib/stores";
+  import { typeIsString } from "@siaikin/utils";
 
   import "./+page.scss";
-  import { typeIsString } from "@siaikin/utils";
+  import WakapiLogo from "../../../static/_assets/images/wakapi-logo.png";
 
   const { StatChart, ChartTag, refresh, store } = Wakapi;
 
@@ -73,7 +74,7 @@
                     fadeIn
                     alt="Power by Wakapi"
                     style="width: 2rem"
-                    src="/images/wakapi-logo.png"
+                    src="{WakapiLogo}"
                   />
                 </Link>
                 <header style="flex: 1 1 auto; width: 0">
