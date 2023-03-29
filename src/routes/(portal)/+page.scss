@@ -1,0 +1,42 @@
+@use "../common";
+
+$wakapi-chart-height: common.$dashboard-chart-base-height * 6;
+
+.wakapi-tile {
+  position: relative;
+}
+
+.wakapi-chart {
+  position: relative;
+
+  height: $wakapi-chart-height - common.$dashboard-tile-padding * 2;
+}
+
+.wakapi-chart__sub-chart {
+  height: calc(#{$wakapi-chart-height} / 2 - #{common.$dashboard-tile-padding} * 2);
+}
+
+.wakapi-grid {
+  position: relative;
+
+  .bx--grid.bx--grid--condensed {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .control-form {
+    display: flex;
+    align-items: center;
+    column-gap: 0.5rem;
+
+    height: 4rem;
+
+    .bx--form-item {
+      flex: 0 0 auto;
+    }
+
+    .bx--fieldset {
+      margin-bottom: 0;
+    }
+  }
+}

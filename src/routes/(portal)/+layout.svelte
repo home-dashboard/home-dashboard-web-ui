@@ -1,9 +1,6 @@
 <script lang="ts">
   import {
     Header,
-    // HeaderNav,
-    // HeaderNavItem,
-    // HeaderNavMenu,
     HeaderUtilities,
     HeaderAction,
     HeaderPanelLinks,
@@ -14,27 +11,37 @@
     SkipToContent,
     Content,
     HeaderPanelDivider,
+    breakpointObserver,
   } from "carbon-components-svelte";
   import DashboardIcon from "carbon-icons-svelte/lib/Dashboard.svelte";
   import ResourceMonitoringIcon from "carbon-icons-svelte/lib/CloudMonitoring.svelte";
   import ProcessMonitoringIcon from "carbon-icons-svelte/lib/CloudLogging.svelte";
-  // import UserAvatarIcon from "carbon-icons-svelte/lib/UserAvatar.svelte";
-  // import UserAvatarFilledIcon from "carbon-icons-svelte/lib/UserAvatarFilled.svelte";
   import UserAvatarFilledAltIcon from "carbon-icons-svelte/lib/UserAvatarFilledAlt.svelte";
   import { afterNavigate, goto } from "$app/navigation";
   import { base } from "$app/paths";
   import { onMount } from "svelte";
   import { refreshEventSource } from "../../lib/http-interface/server-send-event";
   import { signOut } from "../../lib/http-interface";
+  import type { ConfigurationUpdates } from "../../lib/http-interface";
+  import { ConfigurationStore as configuration } from "../../lib/stores";
+
+  export let data: { configurationUpdates: ConfigurationUpdates } = {};
+  configuration.set(data.configurationUpdates);
+
+  const size = breakpointObserver();
+  const largerThanMd = size.largerThan("md");
 
   let isSideNavOpen = false;
   let currentPath = "";
 
-  onMount(() => refreshEventSource());
   afterNavigate((navigation) => (currentPath = navigation.to.url.pathname));
+
+  onMount(async () => {
+    refreshEventSource();
+  });
 </script>
 
-<Header company="HOME" platformName="Dashboard" bind:isSideNavOpen="{isSideNavOpen}">
+<Header company="HOME" platformName="{`Dashboard ${$size}`}" bind:isSideNavOpen="{isSideNavOpen}">
   <svelte:fragment slot="skip-to-content">
     <SkipToContent />
   </svelte:fragment>
@@ -67,7 +74,7 @@
   </HeaderUtilities>
 </Header>
 
-<SideNav bind:isOpen="{isSideNavOpen}" rail>
+<SideNav bind:isOpen="{isSideNavOpen}" rail="{$largerThanMd}">
   <SideNavItems>
     {#if true}
       {@const path = `${base}/`}

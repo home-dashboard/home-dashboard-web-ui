@@ -5,6 +5,7 @@ specifiers:
   '@carbon/charts-svelte': ^1.6.8
   '@carbon/styles': ^1.23.1
   '@ibm/plex': ^6.2.0
+  '@iconify/svelte': ^3.1.0
   '@playwright/test': ^1.28.1
   '@siaikin/utils': ^1.1.1
   '@sveltejs/adapter-auto': ^2.0.0
@@ -17,6 +18,7 @@ specifiers:
   carbon-icons-svelte: ^11.4.0
   carbon-preprocess-svelte: ^0.9.1
   d3: ^7.8.2
+  date-fns: ^2.29.3
   eslint: ^8.28.0
   eslint-config-prettier: ^8.5.0
   eslint-plugin-svelte3: ^4.0.0
@@ -37,6 +39,7 @@ devDependencies:
   '@carbon/charts-svelte': 1.6.8_2akzsxea64r5r3kzbbjpvcyp6m
   '@carbon/styles': 1.23.1_sass@1.58.3
   '@ibm/plex': 6.2.0
+  '@iconify/svelte': 3.1.0_svelte@3.55.1
   '@playwright/test': 1.31.1
   '@siaikin/utils': 1.1.1
   '@sveltejs/adapter-auto': 2.0.0_@sveltejs+kit@1.8.5
@@ -49,6 +52,7 @@ devDependencies:
   carbon-icons-svelte: 11.4.0
   carbon-preprocess-svelte: 0.9.1_sass@1.58.3+svelte@3.55.1
   d3: 7.8.2
+  date-fns: 2.29.3
   eslint: 8.34.0
   eslint-config-prettier: 8.6.0_eslint@8.34.0
   eslint-plugin-svelte3: 4.0.0_dbthnr4b2bdkhyiebwn7su3hnq
@@ -405,6 +409,19 @@ packages:
 
   /@ibm/plex/6.2.0:
     resolution: {integrity: sha512-0ddHQTHN2/LqGC9jahnb7+kR7Cq+EmI1Z+SUVmpehilMu0QZ6hNBU/lOM0O2as5pwZt8xMejKZw4qCMRW9vDLg==}
+    dev: true
+
+  /@iconify/svelte/3.1.0_svelte@3.55.1:
+    resolution: {integrity: sha512-G1w1dcO7eiD+JmQJNwNW4qnAn86oQxKLe1P/iAPjJ0qYYuF7Pb60TPrlcj4+2gu4SXe3a0Jrv++8YmceG+gX/g==}
+    peerDependencies:
+      svelte: '>=3'
+    dependencies:
+      '@iconify/types': 2.0.0
+      svelte: 3.55.1
+    dev: true
+
+  /@iconify/types/2.0.0:
+    resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
     dev: true
 
   /@jridgewell/resolve-uri/3.1.0:
@@ -1214,6 +1231,11 @@ packages:
       d3-timer: 3.0.1
       d3-transition: 3.0.1_d3-selection@3.0.0
       d3-zoom: 3.0.0
+    dev: true
+
+  /date-fns/2.29.3:
+    resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}
+    engines: {node: '>=0.11'}
     dev: true
 
   /date-fns/2.8.1:
