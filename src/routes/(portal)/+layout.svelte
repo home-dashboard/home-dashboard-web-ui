@@ -41,7 +41,7 @@
   });
 </script>
 
-<Header company="HOME" platformName="{`Dashboard ${$size}`}" bind:isSideNavOpen="{isSideNavOpen}">
+<Header company="HOME" platformName="Dashboard" bind:isSideNavOpen="{isSideNavOpen}">
   <svelte:fragment slot="skip-to-content">
     <SkipToContent />
   </svelte:fragment>
