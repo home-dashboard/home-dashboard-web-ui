@@ -84,6 +84,11 @@ export interface ServerMonitorThirdPartyConfiguration {
    * Wakapi 配置.
    */
   wakapi: ServerMonitorThirdPartyWakapiConfiguration;
+
+  /**
+   * GitHub 配置.
+   */
+  github: ServerMonitorThirdPartyGitHubConfiguration;
 }
 
 export interface ServerMonitorThirdPartyWakapiConfiguration {
@@ -91,6 +96,26 @@ export interface ServerMonitorThirdPartyWakapiConfiguration {
    * 是否启用 Wakapi, 默认为 false.
    */
   enable: boolean;
+  /**
+   * Wakapi 的 API Key.
+   */
+  apiKey: string;
+  /**
+   * Wakapi 的 API URL.
+   */
+  apiUrl: string;
+}
+
+export interface ServerMonitorThirdPartyGitHubConfiguration {
+  /**
+   * 是否启用 GitHub, 默认为 false.
+   */
+  enable: boolean;
+  /**
+   * GitHub 访问令牌, 用于访问 GitHub API
+   * See https://docs.github.com/zh/rest/overview/authenticating-to-the-rest-api?apiVersion=2022-11-28#%E4%BD%BF%E7%94%A8-personal-access-token-%E8%BF%9B%E8%A1%8C%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81
+   */
+  personalAccessToken: string;
   /**
    * Wakapi 的 API Key.
    */

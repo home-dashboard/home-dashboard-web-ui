@@ -276,3 +276,8 @@ export interface ProcessStat {
   ThreadSize: number;
   createTime: number;
 }
+
+export interface ThirdPartyNotificationMessage {
+  type: string;
+  data: Record<string, unknown>;
+}

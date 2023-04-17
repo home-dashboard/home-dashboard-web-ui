@@ -16,7 +16,7 @@ $wakapi-chart-height: common.$dashboard-chart-base-height * 6;
   height: 100%
 }
 
-.wakapi-grid {
+.wakapi-grid, .github-grid {
   position: relative;
 
   .bx--grid.bx--grid--condensed {
