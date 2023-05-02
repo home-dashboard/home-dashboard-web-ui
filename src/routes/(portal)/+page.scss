@@ -5,18 +5,19 @@ $wakapi-chart-height: common.$dashboard-chart-base-height * 6;
 .wakapi-tile {
   position: relative;
 
-  height: 100%
+  height: 100%;
 }
 
 .wakapi-chart {
-  height: 100%
+  height: 100%;
 }
 
 .wakapi-chart__sub-chart {
-  height: 100%
+  height: 100%;
 }
 
-.wakapi-grid, .github-grid {
+.wakapi-grid,
+.github-grid {
   position: relative;
 
   .bx--grid.bx--grid--condensed {

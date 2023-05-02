@@ -18,7 +18,7 @@
       </Column>
     {/if}
     {#if githubEnabled}
-      <Column noGutter sm="{4}" md="{8}" lg="{4}" xlg="{8}" max="{8}">
+      <Column noGutter sm="{4}" md="{8}" lg="{4}" xlg="{4}" max="{4}">
         <GitHubGrid />
       </Column>
     {/if}

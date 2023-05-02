@@ -20,6 +20,7 @@
   import { afterNavigate, goto } from "$app/navigation";
   import { base } from "$app/paths";
   import { onMount } from "svelte";
+  import NotificationsPanel from "$lib/components/notification-panel/notifications-panel.svelte";
   import { refreshEventSource } from "../../lib/http-interface/server-send-event";
   import { signOut } from "../../lib/http-interface";
   import type { ConfigurationUpdates } from "../../lib/http-interface";
@@ -59,6 +60,7 @@
   <!--  </HeaderNav>-->
 
   <HeaderUtilities>
+    <NotificationsPanel />
     <HeaderAction icon="{UserAvatarFilledAltIcon}" closeIcon="{UserAvatarFilledAltIcon}">
       <HeaderPanelLinks>
         <HeaderPanelDivider />

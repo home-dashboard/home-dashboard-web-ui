@@ -13,7 +13,7 @@ import type {
   FormattedSystemRealtimeStat,
   FormattedProcessRealtimeStat,
   ProcessRealtimeStat,
-  ThirdPartyNotificationMessage,
+  UserNotificationMessage,
 } from "./notification-types";
 
 function formatRealtimeCpuStat(cpuStatMap: Record<string, SystemCpuStat>): FormattedSystemCpuStat {
@@ -149,7 +149,7 @@ function formatProcessRealtimeStat(stat: ProcessRealtimeStat): FormattedProcessR
 function initialNotification() {
   const realtimeStatSubject = new Subject<FormattedSystemRealtimeStat>();
   const processRealtimeStatSubject = new Subject<FormattedProcessRealtimeStat>();
-  const thirdPartySubject = new Subject<ThirdPartyNotificationMessage>();
+  const userNotificationSubject = new Subject<UserNotificationMessage>();
 
   let prevStat: { realtimeStat: SystemRealtimeStat };
   let sse: EventSource;
@@ -175,15 +175,15 @@ function initialNotification() {
       processRealtimeStatSubject.next(formatProcessRealtimeStat(stat));
     });
 
-    sse.addEventListener("thirdParty", (ev) => {
-      thirdPartySubject.next(JSON.parse(ev.data) as ThirdPartyNotificationMessage);
+    sse.addEventListener("userNotification", (ev) => {
+      userNotificationSubject.next(JSON.parse(ev.data));
     });
   }
 
   return {
     realtimeStatObservable: realtimeStatSubject.asObservable(),
     processRealtimeStatObservable: processRealtimeStatSubject.asObservable(),
-    thirdPartyObservable: thirdPartySubject.asObservable(),
+    userNotificationObservable: userNotificationSubject.asObservable(),
     refreshEventSource: createNotificationEventSource,
   };
 }
@@ -191,6 +191,6 @@ function initialNotification() {
 export const {
   realtimeStatObservable,
   processRealtimeStatObservable,
-  thirdPartyObservable,
+  userNotificationObservable,
   refreshEventSource,
 } = initialNotification();

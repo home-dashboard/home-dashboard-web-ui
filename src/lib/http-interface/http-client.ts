@@ -92,6 +92,10 @@ export class HttpClient {
   async put<T>(config: Omit<AjaxConfig, "method">): Promise<T> {
     return (await this.request<T>({ ...config, method: "PUT" })).response;
   }
+
+  async patch<T>(config: Omit<AjaxConfig, "method">): Promise<T> {
+    return (await this.request<T>({ ...config, method: "PATCH" })).response;
+  }
 }
 
 export class ResponseInternalError extends Error {

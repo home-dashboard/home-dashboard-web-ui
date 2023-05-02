@@ -277,7 +277,6 @@ export interface ProcessStat {
   createTime: number;
 }
 
-export interface ThirdPartyNotificationMessage {
-  type: string;
-  data: Record<string, unknown>;
+export interface UserNotificationMessage {
+  [key: string]: unknown;
 }

@@ -80,7 +80,7 @@
         <!--        <Icon icon="octicon:repo-forked-16" inline />-->
         <!--        {githubUserForkCount}-->
 
-        <ContributionsChart days="{githubUserContributionWeeks}" intl="en" />
+        <ContributionsChart days="{githubUserContributionWeeks}" />
       </Tile>
     </Column>
   </Row>
