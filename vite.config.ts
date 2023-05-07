@@ -13,7 +13,10 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      [BASE_URL]: "http://localhost:8080",
+      [BASE_URL]: {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+      },
     },
   },
 });
