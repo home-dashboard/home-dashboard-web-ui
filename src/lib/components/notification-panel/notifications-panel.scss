@@ -125,28 +125,30 @@ $block-class: #{common.$project-prefix}--notifications-panel;
   }
 }
 
-.bx--header-panel--expanded {
-  max-width: 22.75rem;
-  min-width: 22.75rem;
-  min-height: 38.5rem;
-  max-height: 38.5rem;
+.#{$block-class}__wrapper {
+  .bx--header-panel--expanded {
+    max-width: 22.75rem;
+    min-width: 22.75rem;
+    min-height: 38.5rem;
+    max-height: 38.5rem;
 
-  overflow: auto;
-}
-
-.#{$block-class} {
-  position: relative;
-
-  width: 100%;
-  height: 100%;
-
-  overflow: auto;
-
-  .#{$block-class}__header-container {
-    @include notifications-panel__header;
+    overflow: auto;
   }
 
-  .#{$block-class}__main-section {
-    @include toast-notification__override;
+  .#{$block-class} {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: auto;
+
+    .#{$block-class}__header-container {
+      @include notifications-panel__header;
+    }
+
+    .#{$block-class}__main-section {
+      @include toast-notification__override;
+    }
   }
 }

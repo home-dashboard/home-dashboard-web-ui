@@ -15,23 +15,38 @@
     InlineLoading,
   } from "carbon-components-svelte";
   import ArrowRight from "carbon-icons-svelte/lib/ArrowRight.svelte";
-  import { signIn } from "../../lib/http-interface";
-  import { goto } from "$app/navigation";
+  import { signIn, validate2FA } from "$lib/http-interface";
+  import type { User } from "$lib/http-interface";
+  import { INTERACTIVE_INTERVAL } from "$lib/utils/interactive_interval";
 
-  const loginForm = {
-    username: "",
-    password: "",
-    rememberMe: false,
-  };
+  let step = "login";
+  let redirectPromise: Promise<void>;
 
-  let loginPromise: Promise<void>;
-
+  // 账号密码登录相关逻辑
+  const loginForm = { username: "", password: "", rememberMe: false };
+  let loginPromise: Promise<User>;
+  let userInfo: User;
   async function handleLogin() {
     loginPromise = signIn(loginForm);
 
-    await loginPromise;
+    userInfo = await loginPromise;
 
-    await goto("/", { replaceState: true });
+    if (userInfo.enable2FA) {
+      step = "validate2FA";
+      return;
+    }
+
+    redirectPromise = INTERACTIVE_INTERVAL.gotoAfterMoment("/", { replaceState: true });
+  }
+
+  // 2FA 校验相关逻辑
+  const authForm = { code: "" };
+  let validateCodePromise: Promise<void>;
+  async function handleValidateCode() {
+    validateCodePromise = validate2FA(authForm.code);
+    await validateCodePromise;
+
+    redirectPromise = INTERACTIVE_INTERVAL.gotoAfterMoment("/", { replaceState: true });
   }
 </script>
 
@@ -46,61 +61,122 @@
         max="{{ span: 5, offset: 5.5 }}"
       >
         <Tile>
-          <Form on:submit="{handleLogin}">
-            <h2>Login in</h2>
+          {#if step === "login"}
+            <Form on:submit="{handleLogin}">
+              <h2>Login in</h2>
 
-            {#await loginPromise}
-              <div style="margin-bottom: 3rem"></div>
-            {:then _}
-              <div style="margin-bottom: 3rem"></div>
-            {:catch error}
-              <InlineNotification
-                hideCloseButton
-                kind="error"
-                title="Error:"
-                subtitle="Incorrect username or password. Try again."
-              />
-            {/await}
+              {#await loginPromise}
+                <div style="margin-bottom: 3rem"></div>
+              {:then _}
+                <div style="margin-bottom: 3rem"></div>
+              {:catch error}
+                <InlineNotification
+                  hideCloseButton
+                  kind="error"
+                  title="Error:"
+                  subtitle="Incorrect username or password. Try again."
+                />
+              {/await}
 
-            <TextInput
-              style="margin-bottom: 1.5rem"
-              autofocus
-              labelText="Username"
-              bind:value="{loginForm.username}"
-            />
+              <TextInput autofocus labelText="Username" bind:value="{loginForm.username}" />
+              <div style="margin-bottom: 1.5rem"></div>
 
-            <div style="margin-bottom: 1.5rem">
               <PasswordInput bind:value="{loginForm.password}" tooltipPosition="left">
                 <svelte:fragment slot="labelText">
                   <span slot="labelText">Password</span>
                   <Link class="forgot-password" href="/sign-in">Forgot password?</Link>
                 </svelte:fragment>
               </PasswordInput>
-            </div>
+              <div style="margin-bottom: 1.5rem"></div>
 
-            <Checkbox
-              style="margin-bottom: 2.5rem"
-              bind:chcked="{loginForm.rememberMe}"
-              labelText="Remember me"
-            />
+              <Checkbox bind:chcked="{loginForm.rememberMe}" labelText="Remember me" />
+              <div style="margin-bottom: 2.5rem"></div>
 
-            <ButtonSet style="margin-bottom: 1rem">
-              <Button kind="ghost">Log in with SMS</Button>
+              <ButtonSet>
+                <Button kind="ghost">Log in with SMS</Button>
 
-              {#await loginPromise}
-                <InlineLoading status="active" description="logging..." />
+                {#await loginPromise}
+                  <Button disabled kind="ghost">
+                    <InlineLoading status="active" description="logging..." />
+                  </Button>
+                {:then _}
+                  {#if !!redirectPromise}
+                    <Button disabled kind="ghost">
+                      <InlineLoading status="finished" description="verified" />
+                    </Button>
+                  {:else}
+                    <Button icon="{ArrowRight}" type="submit">Continue</Button>
+                  {/if}
+                {:catch _}
+                  <Button icon="{ArrowRight}" type="submit">Continue</Button>
+                {/await}
+              </ButtonSet>
+              <div style="margin-bottom: 1rem"></div>
+
+              <div>
+                Don't have a account?
+                <Link href="/sign-in">Create an account</Link>
+              </div>
+            </Form>
+          {:else if step === "validate2FA"}
+            <Form on:submit="{handleValidateCode}">
+              <h2>Two-factor authentication</h2>
+
+              {#await validateCodePromise}
+                <div style="margin-bottom: 3rem"></div>
               {:then _}
-                <Button icon="{ArrowRight}" type="submit">Continue</Button>
-              {:catch _}
-                <Button icon="{ArrowRight}" type="submit">Continue</Button>
+                <div style="margin-bottom: 3rem"></div>
+              {:catch error}
+                <InlineNotification
+                  hideCloseButton
+                  kind="error"
+                  title="Error:"
+                  subtitle="Incorrect code. Try again."
+                />
               {/await}
-            </ButtonSet>
 
-            <div>
-              Don't have a account?
-              <Link href="/sign-in">Create an account</Link>
-            </div>
-          </Form>
+              <TextInput
+                autofocus
+                labelText="Authentication code"
+                maxlength="6"
+                placeholder="XXXXXX"
+                bind:value="{authForm.code}"
+              />
+              <div style="margin-bottom: 1.5rem"></div>
+
+              <ButtonSet>
+                {#await validateCodePromise}
+                  <Button disabled kind="ghost">
+                    <InlineLoading status="active" description="verifying..." />
+                  </Button>
+                {:then _}
+                  {#if !!redirectPromise}
+                    <Button disabled kind="ghost">
+                      <InlineLoading status="finished" description="verified" />
+                    </Button>
+                  {:else}
+                    <Button
+                      icon="{ArrowRight}"
+                      type="submit"
+                      disabled="{authForm.code.length !== 6}"
+                    >
+                      Verify
+                    </Button>
+                  {/if}
+                {:catch _}
+                  <Button icon="{ArrowRight}" type="submit" disabled="{authForm.code.length !== 6}">
+                    Verify
+                  </Button>
+                {/await}
+              </ButtonSet>
+              <div style="margin-bottom: 1rem"></div>
+
+              <div>
+                Open your two-factor authenticator (TOTP) app or browser extension to view your
+                authentication code.
+              </div>
+            </Form>
+          {/if}
         </Tile>
       </Column>
     </Row>
@@ -116,8 +192,16 @@
     float: right;
   }
 
-  :global(.bx--btn-set .bx--btn) {
-    flex: 1 1 auto;
+  :global(.bx--btn-set) {
+    justify-content: flex-end;
+  }
+
+  :global(.bx--btn-set) {
+    justify-content: flex-end;
+  }
+
+  :global(.bx--inline-loading) {
+    min-height: auto;
   }
 
   .login-wrapper {

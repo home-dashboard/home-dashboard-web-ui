@@ -9,3 +9,7 @@ $dashboard-chart-height: $dashboard-chart-base-height * 4;
 .dashboard-chart {
   height: $dashboard-chart-height - $dashboard-tile-padding * 2;
 }
+
+.icon--inline {
+  vertical-align: -0.125em;
+}

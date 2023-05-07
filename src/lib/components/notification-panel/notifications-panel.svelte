@@ -17,13 +17,13 @@
   import WakapiLogo from "../../assets/images/wakapi-logo.png";
   import GitHubLogo from "../../assets/images/github-logo-white.svg";
 
+  export let isOpen = false;
+
   const logoMap = {
     wakapi: WakapiLogo,
     github: GitHubLogo,
   };
   const blockClass = `${"hd"}--notifications-panel`;
-
-  let isOpen = false;
 
   function handleOpenNewTab(e: PointerEvent, notification: UserNotification): void {
     const element = e.currentTarget as HTMLDivElement;
@@ -48,58 +48,62 @@
   }
 </script>
 
-<HeaderAction
-  bind:isOpen="{isOpen}"
-  transition="{false}"
-  icon="{$UserNotificationStore.notifications.length > 0 ? NotificationNew : Notification}"
-  closeIcon="{$UserNotificationStore.notifications.length > 0 ? NotificationNew : Notification}"
->
-  <div class="{blockClass}" on:click="{(e) => e.stopPropagation()}">
-    <div class="{`${blockClass}__header-container`}">
-      <div class="{`${blockClass}__header-flex`}">
-        <h3 class="{`${blockClass}__header`}">Notifications</h3>
-        <Button
-          class="{`${blockClass}__dismiss-button`}"
-          kind="ghost"
-          size="small"
-          on:click="{markAllAsRead}">Clear all</Button
-        >
+<div class="{`${blockClass}__wrapper`}">
+  <HeaderAction
+    on:open
+    on:close
+    isOpen="{isOpen}"
+    transition="{false}"
+    icon="{$UserNotificationStore.notifications.length > 0 ? NotificationNew : Notification}"
+    closeIcon="{$UserNotificationStore.notifications.length > 0 ? NotificationNew : Notification}"
+  >
+    <div class="{blockClass}" on:click="{(e) => e.stopPropagation()}">
+      <div class="{`${blockClass}__header-container`}">
+        <div class="{`${blockClass}__header-flex`}">
+          <h3 class="{`${blockClass}__header`}">Notifications</h3>
+          <Button
+            class="{`${blockClass}__dismiss-button`}"
+            kind="ghost"
+            size="small"
+            on:click="{markAllAsRead}">Clear all</Button
+          >
+        </div>
+        <!--      <Toggle size="sm" class="{`${blockClass}__do-not-disturb-toggle`}">-->
+        <!--        <span slot="labelA">Do not disturb</span>-->
+        <!--        <span slot="labelB">Do not disturb</span>-->
+        <!--      </Toggle>-->
       </div>
-      <!--      <Toggle size="sm" class="{`${blockClass}__do-not-disturb-toggle`}">-->
-      <!--        <span slot="labelA">Do not disturb</span>-->
-      <!--        <span slot="labelB">Do not disturb</span>-->
-      <!--      </Toggle>-->
+      <div class="{`${blockClass}__main-section`}">
+        {#each $UserNotificationStore.notifications as notification, index}
+          {@const now = Date.now()}
+          <ToastNotification
+            role="notification"
+            fullWidth
+            kind="{notification.kind}"
+            data-url="{notification.link}"
+            on:click="{(e) => handleOpenNewTab(e, notification)}"
+            on:close="{() => markAsRead(notification)}"
+          >
+            <svelte:fragment slot="title">
+              <Truncate>{roundDurationToString(notification.originCreateAt - now)}</Truncate>
+            </svelte:fragment>
+            <svelte:fragment slot="subtitle">
+              <Truncate title="{notification.title}">
+                {#if logoMap[notification.origin]}
+                  <ImageLoader
+                    class="{`${blockClass}__subtitle-icon`}"
+                    src="{logoMap[notification.origin]}"
+                  />
+                {/if}
+                {notification.title}
+              </Truncate>
+            </svelte:fragment>
+            <svelte:fragment slot="caption">
+              <Truncate title="{notification.caption}">{notification.caption}</Truncate>
+            </svelte:fragment>
+          </ToastNotification>
+        {/each}
+      </div>
     </div>
-    <div class="{`${blockClass}__main-section`}">
-      {#each $UserNotificationStore.notifications as notification, index}
-        {@const now = Date.now()}
-        <ToastNotification
-          role="notification"
-          fullWidth
-          kind="{notification.kind}"
-          data-url="{notification.link}"
-          on:click="{(e) => handleOpenNewTab(e, notification)}"
-          on:close="{() => markAsRead(notification)}"
-        >
-          <svelte:fragment slot="title">
-            <Truncate>{roundDurationToString(notification.originCreateAt - now)}</Truncate>
-          </svelte:fragment>
-          <svelte:fragment slot="subtitle">
-            <Truncate title="{notification.title}">
-              {#if logoMap[notification.origin]}
-                <ImageLoader
-                  class="{`${blockClass}__subtitle-icon`}"
-                  src="{logoMap[notification.origin]}"
-                />
-              {/if}
-              {notification.title}
-            </Truncate>
-          </svelte:fragment>
-          <svelte:fragment slot="caption">
-            <Truncate title="{notification.caption}">{notification.caption}</Truncate>
-          </svelte:fragment>
-        </ToastNotification>
-      {/each}
-    </div>
-  </div>
-</HeaderAction>
+  </HeaderAction>
+</div>

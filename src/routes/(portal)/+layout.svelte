@@ -12,11 +12,13 @@
     Content,
     HeaderPanelDivider,
     breakpointObserver,
+    SideNavDivider,
   } from "carbon-components-svelte";
   import DashboardIcon from "carbon-icons-svelte/lib/Dashboard.svelte";
   import ResourceMonitoringIcon from "carbon-icons-svelte/lib/CloudMonitoring.svelte";
   import ProcessMonitoringIcon from "carbon-icons-svelte/lib/CloudLogging.svelte";
   import UserAvatarFilledAltIcon from "carbon-icons-svelte/lib/UserAvatarFilledAlt.svelte";
+  import SettingsIcon from "carbon-icons-svelte/lib/Settings.svelte";
   import { afterNavigate, goto } from "$app/navigation";
   import { base } from "$app/paths";
   import { onMount } from "svelte";
@@ -34,6 +36,8 @@
 
   let isSideNavOpen = false;
   let currentPath = "";
+
+  let currentOpenPanel = "";
 
   afterNavigate((navigation) => (currentPath = navigation.to.url.pathname));
 
@@ -60,9 +64,24 @@
   <!--  </HeaderNav>-->
 
   <HeaderUtilities>
-    <NotificationsPanel />
-    <HeaderAction icon="{UserAvatarFilledAltIcon}" closeIcon="{UserAvatarFilledAltIcon}">
+    <!-- 用户通知面板 -->
+    <NotificationsPanel
+      isOpen="{currentOpenPanel === 'notificationsPanel'}"
+      on:open="{() => (currentOpenPanel = 'notificationsPanel')}"
+      on:close="{() => (currentOpenPanel = '')}"
+    />
+
+    <HeaderAction
+      isOpen="{currentOpenPanel === 'user'}"
+      on:open="{() => (currentOpenPanel = 'user')}"
+      on:close="{() => (currentOpenPanel = '')}"
+      icon="{UserAvatarFilledAltIcon}"
+      closeIcon="{UserAvatarFilledAltIcon}"
+      transition="{false}"
+    >
       <HeaderPanelLinks>
+        <HeaderPanelLink href="{`${base}/settings`}">Settings</HeaderPanelLink>
+
         <HeaderPanelDivider />
 
         <HeaderPanelLink
@@ -105,6 +124,19 @@
         isSelected="{currentPath === path}"
       />
     {/if}
+
+    <SideNavDivider />
+
+    {#if true}
+      {@const path = `${base}/settings`}
+      <SideNavLink
+        icon="{SettingsIcon}"
+        text="Settings"
+        href="{path}"
+        isSelected="{currentPath === path}"
+      />
+    {/if}
+
     <!--    <SideNavMenu icon="{ProcessMonitoringIcon}" text="Process Monitoring" href="/system-process">-->
     <!--      <SideNavMenuItem href="/" text="Link 1" />-->
     <!--      <SideNavMenuItem href="/" text="Link 2" />-->
