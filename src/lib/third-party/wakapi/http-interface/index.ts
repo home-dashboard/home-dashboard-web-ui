@@ -1,4 +1,5 @@
 import { httpClient } from "../../../http-interface";
+import { typeIsString } from "@siaikin/utils";
 
 export async function getStats(
   range: StatsRange,
@@ -17,6 +18,21 @@ export async function getProjects(): Promise<Array<Project>> {
   return result.data;
 }
 
+export async function getSummaries(
+  range: string | Pick<SummariesQueryParams, "start" | "end">,
+  params: Partial<Omit<SummariesQueryParams, "start" | "end">>
+): Promise<SummariesViewModel> {
+  return await httpClient.get<SummariesViewModel>({
+    url: `wakapi/summaries`,
+    queryParams: {
+      ...params,
+      range: typeIsString(range) ? range : "",
+      start: typeIsString(range) ? "" : range.start,
+      end: typeIsString(range) ? "" : range.end,
+    },
+  });
+}
+
 export interface StatsQueryParams {
   project: string;
   language: string;
@@ -24,6 +40,12 @@ export interface StatsQueryParams {
   branch: string;
   machine: string;
   operating_system: string;
+}
+
+export interface SummariesQueryParams extends StatsQueryParams {
+  range: StatsRange;
+  start: number;
+  end: number;
 }
 
 export enum StatsRange {
@@ -88,4 +110,39 @@ export interface Project {
   id: string;
   name: string;
   repository: string;
+}
+
+export interface SummariesViewModel {
+  data: Array<SummariesData>;
+  end: string;
+  start: string;
+}
+
+export interface SummariesData {
+  branches: Array<SummariesEntry>;
+  categories: Array<SummariesEntry>;
+  dependencies: Array<SummariesEntry>;
+  editors: Array<SummariesEntry>;
+  grand_total: SummariesGrandTotal;
+  languages: Array<SummariesEntry>;
+  machines: Array<SummariesEntry>;
+  operating_systems: Array<SummariesEntry>;
+  projects: Array<SummariesEntry>;
+  range: SummariesRange;
+}
+
+export interface SummariesGrandTotal {
+  digital: string;
+  hours: number;
+  minutes: number;
+  text: string;
+  total_seconds: number;
+}
+
+export interface SummariesRange {
+  date: string;
+  end: string;
+  start: string;
+  text: string;
+  timezone: string;
 }

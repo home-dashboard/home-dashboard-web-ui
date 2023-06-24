@@ -1,4 +1,4 @@
-import { Pie } from "@carbon/charts/interfaces/events";
+import { Pie, Legend } from "@carbon/charts/interfaces/events";
 
 /**
  * Wakapi 统计数据图表类型.
@@ -21,6 +21,7 @@ export enum ChartTagPosition {
 
 export const Events = {
   Pie: Pie,
+  Legend: Legend,
 };
 
 export type EventData = { event: Event; element: HTMLElement; datum: unknown };

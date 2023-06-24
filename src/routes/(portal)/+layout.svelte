@@ -27,6 +27,7 @@
   import { signOut } from "../../lib/http-interface";
   import type { ConfigurationUpdates } from "../../lib/http-interface";
   import { ConfigurationStore as configuration } from "../../lib/stores";
+  import Icon from "@iconify/svelte";
 
   export let data: { configurationUpdates: ConfigurationUpdates } = {};
   configuration.set(data.configurationUpdates);
@@ -123,6 +124,17 @@
         href="{path}"
         isSelected="{currentPath === path}"
       />
+    {/if}
+
+    <SideNavDivider />
+
+    {#if true}
+      {@const path = `${base}/third-party/wakapi`}
+      <SideNavLink text="Wakapi" href="{path}" isSelected="{currentPath === path}">
+        <svelte:fragment slot="icon">
+          <Icon icon="logos:wakatime" />
+        </svelte:fragment>
+      </SideNavLink>
     {/if}
 
     <SideNavDivider />

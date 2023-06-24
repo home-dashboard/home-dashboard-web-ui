@@ -39,5 +39,10 @@ $wakapi-chart-height: common.$dashboard-chart-base-height * 6;
     .bx--fieldset {
       margin-bottom: 0;
     }
+
+    .control-form__overflow-menu-button {
+      background-color: #f4f4f4;
+      align-self: flex-end;
+    }
   }
 }

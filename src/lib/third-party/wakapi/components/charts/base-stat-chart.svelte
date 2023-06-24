@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { store, refresh } from "../../stores";
+  import { statsStore, statsStoreRefresh } from "../../stores";
   import { BaseChart } from "../../../../components/charts";
 
-  const stat = store;
+  const stat = statsStore;
 </script>
 
 <BaseChart {...$$restProps}>
-  <slot stat="{$stat}" refresh="{refresh}" />
+  <slot stat="{$stat}" refresh="{statsStoreRefresh}" />
 </BaseChart>

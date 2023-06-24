@@ -14,6 +14,8 @@
     truncate,
     breakpointObserver,
     AspectRatio,
+    OverflowMenu,
+    OverflowMenuItem,
   } from "carbon-components-svelte";
   import { Wakapi } from "../../lib/third-party";
   import { formatDuration } from "../../lib/utils/format-duration";
@@ -21,8 +23,9 @@
   import { typeIsString } from "@siaikin/utils";
 
   import WakapiLogo from "$lib/assets/images/wakapi-logo.png";
+  import { base } from "$app/paths";
 
-  const { StatChart, ChartTag, refresh, store } = Wakapi;
+  const { StatChart, ChartTag, statsStoreRefresh, statsStore } = Wakapi;
 
   const size = breakpointObserver();
   const largerThanSm = size.largerThan("sm");
@@ -32,7 +35,7 @@
   url.pathname = "";
   const wakapiHost = url.toString();
 
-  $: wakapiHumanReadableTime = formatDuration($store.total_seconds);
+  $: wakapiHumanReadableTime = formatDuration($statsStore.total_seconds);
 
   const controlFormData = {
     range: Wakapi.StatsRange.TODAY,
@@ -41,7 +44,7 @@
   };
   $: wakapiTitle = typeIsString(controlFormData.project) ? controlFormData.project : "Wakapi";
   $: {
-    if ($isMounted) refresh(controlFormData.range, { project: controlFormData.project });
+    if ($isMounted) statsStoreRefresh(controlFormData.range, { project: controlFormData.project });
   }
 
   const handleProjectClick = (event) => {
@@ -82,6 +85,9 @@
               <SelectItem value="{Wakapi.StatsRange[range]}" text="{Wakapi.StatsRange[range]}" />
             {/each}
           </Select>
+          <OverflowMenu class="control-form__overflow-menu-button">
+            <OverflowMenuItem text="History" href="{`${base}/third-party/wakapi`}" />
+          </OverflowMenu>
         {/if}
       </Form>
     </Column>
