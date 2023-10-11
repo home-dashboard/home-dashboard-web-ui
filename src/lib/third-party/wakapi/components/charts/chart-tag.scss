@@ -1,0 +1,32 @@
+.hd--tag {
+  position: absolute;
+  z-index: 1;
+
+  margin: 0;
+
+  border-radius: 0;
+}
+
+.hd--tag .bx--tag__close-icon {
+  border-radius: 0;
+}
+
+.hd--tag--top-right {
+  top: 0;
+  right: 0;
+}
+
+.hd--tag--bottom-left {
+  bottom: 0;
+  left: 0;
+}
+
+.hd--tag--bottom-right {
+  bottom: 0;
+  right: 0;
+}
+
+.hd--tag--top-left {
+  top: 0;
+  left: 0;
+}

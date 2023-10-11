@@ -2,7 +2,7 @@ import { httpClient } from "../http-client";
 
 export async function modifyCollectStat({
   system,
-  process,
+  process
 }: Partial<{
   system: Partial<CollectStatConfig["system"]>;
   process: Partial<CollectStatConfig["process"]>;
@@ -11,12 +11,12 @@ export async function modifyCollectStat({
 
   system = {
     ...oldConfig.system,
-    ...system,
+    ...system
   };
 
   process = {
     ...oldConfig.process,
-    ...process,
+    ...process
   };
 
   return httpClient.post({ url: "notification/collect", body: { system, process } });

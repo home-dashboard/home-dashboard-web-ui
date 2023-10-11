@@ -1,0 +1,57 @@
+@use "@carbon/styles/scss/spacing";
+
+.wakapi-container {
+  row-gap: spacing.$spacing-04;
+
+  .control-form {
+    display: flex;
+    justify-content: space-between;
+
+    column-gap: 0.5rem;
+
+    .bx--form-item {
+      flex: 0 0 auto;
+    }
+
+    .bx--fieldset {
+      margin-bottom: 0;
+    }
+  }
+
+  .wakapi-search-form__shortcut {
+    display: flex;
+    justify-content: space-between;
+
+    .shortcut__content {
+      flex: 1 1 auto;
+
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      flex-wrap: wrap;
+
+      .bx--checkbox-wrapper {
+        &:first-of-type, &:last-of-type {
+          margin-top: 0;
+        }
+      }
+    }
+
+    .shortcut__filter-button {
+    }
+  }
+
+  .control-form__filter-button {
+    align-self: flex-end;
+  }
+
+  .chart-container {
+    height: calc(100% - 3.5rem);
+
+    .summary-chart-row,
+    .summary-chart-tile,
+    .summary-chart {
+      height: 100%;
+    }
+  }
+}

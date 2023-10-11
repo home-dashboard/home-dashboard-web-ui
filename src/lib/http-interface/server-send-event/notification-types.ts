@@ -276,3 +276,7 @@ export interface ProcessStat {
   ThreadSize: number;
   createTime: number;
 }
+
+export interface UserNotificationMessage {
+  [key: string]: unknown;
+}

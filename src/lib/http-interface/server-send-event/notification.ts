@@ -13,7 +13,9 @@ import type {
   FormattedSystemRealtimeStat,
   FormattedProcessRealtimeStat,
   ProcessRealtimeStat,
+  UserNotificationMessage
 } from "./notification-types";
+import { OverseerNewVersionMessage, OverseerStatusMessage } from "./overseer-notification-types";
 
 function formatRealtimeCpuStat(cpuStatMap: Record<string, SystemCpuStat>): FormattedSystemCpuStat {
   const cpuStat = cpuStatMap[0] || {};
@@ -24,7 +26,7 @@ function formatRealtimeCpuStat(cpuStatMap: Record<string, SystemCpuStat>): Forma
     logicalCounts: cpuStat?.logicalCounts,
     physicalCounts: cpuStat?.physicalCounts,
     perPercents: cpuStat?.perPercents,
-    percent: cpuStat?.percent,
+    percent: cpuStat?.percent
   };
 }
 
@@ -65,8 +67,8 @@ function formatRealtimeNetworkStat(
       interfaceStat: item.interfaceStat,
       ioStat: {
         receiveRate: Math.floor(((ioStat.bytesRecv - prevIoStat.bytesRecv) / duration) * 1e3),
-        sentRate: Math.floor(((ioStat.bytesSent - prevIoStat.bytesSent) / duration) * 1e3),
-      },
+        sentRate: Math.floor(((ioStat.bytesSent - prevIoStat.bytesSent) / duration) * 1e3)
+      }
     });
   }
 
@@ -100,8 +102,8 @@ function formatRealtimeDiskStat(
       usageStat: item.usageStat,
       ioStat: {
         writeRate: Math.floor(((ioStat.writeBytes - prevIoStat.writeBytes) / duration) * 1e3),
-        readRate: Math.floor(((ioStat.readBytes - prevIoStat.readBytes) / duration) * 1e3),
-      },
+        readRate: Math.floor(((ioStat.readBytes - prevIoStat.readBytes) / duration) * 1e3)
+      }
     });
   }
 
@@ -127,7 +129,7 @@ function formatRealtimeStat(
     memory: formatRealtimeMemoryStat(memory),
     network: formatRealtimeNetworkStat(network, prevRealtimeStat.network, duration),
     disk: formatRealtimeDiskStat(disk, prevRealtimeStat.disk, duration),
-    timestamp: Math.floor((realtimeStat.timestamp + prevRealtimeStat.timestamp) / 2),
+    timestamp: Math.floor((realtimeStat.timestamp + prevRealtimeStat.timestamp) / 2)
   };
 }
 
@@ -148,6 +150,11 @@ function formatProcessRealtimeStat(stat: ProcessRealtimeStat): FormattedProcessR
 function initialNotification() {
   const realtimeStatSubject = new Subject<FormattedSystemRealtimeStat>();
   const processRealtimeStatSubject = new Subject<FormattedProcessRealtimeStat>();
+  const userNotificationSubject = new Subject<UserNotificationMessage>();
+  const overseerSubjects = {
+    newVersion: new Subject<OverseerNewVersionMessage>(),
+    statusMessage: new Subject<OverseerStatusMessage>()
+  };
 
   let prevStat: { realtimeStat: SystemRealtimeStat };
   let sse: EventSource;
@@ -172,14 +179,39 @@ function initialNotification() {
 
       processRealtimeStatSubject.next(formatProcessRealtimeStat(stat));
     });
+
+    sse.addEventListener("userNotification", (ev) =>
+      userNotificationSubject.next(JSON.parse(ev.data))
+    );
+
+    sse.addEventListener("userNotification", (ev) =>
+      userNotificationSubject.next(JSON.parse(ev.data))
+    );
+
+    sse.addEventListener("overseer.StatusMessageType", (ev) =>
+      overseerSubjects.statusMessage.next(JSON.parse(ev.data))
+    );
+    sse.addEventListener("overseer.NewVersionMessageType", (ev) =>
+      overseerSubjects.newVersion.next(JSON.parse(ev.data))
+    );
   }
 
   return {
     realtimeStatObservable: realtimeStatSubject.asObservable(),
     processRealtimeStatObservable: processRealtimeStatSubject.asObservable(),
-    refreshEventSource: createNotificationEventSource,
+    userNotificationObservable: userNotificationSubject.asObservable(),
+    overseerObservables: {
+      newVersion: overseerSubjects.newVersion.asObservable(),
+      statusMessage: overseerSubjects.statusMessage.asObservable()
+    },
+    refreshEventSource: createNotificationEventSource
   };
 }
 
-export const { realtimeStatObservable, processRealtimeStatObservable, refreshEventSource } =
-  initialNotification();
+export const {
+  realtimeStatObservable,
+  processRealtimeStatObservable,
+  userNotificationObservable,
+  overseerObservables,
+  refreshEventSource
+} = initialNotification();

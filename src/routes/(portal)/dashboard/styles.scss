@@ -1,0 +1,26 @@
+@use "@carbon/styles/scss/spacing";
+
+.wakapi-grid,
+.github-grid {
+  // 为 wakapi-grid 和 github-grid 的标题和图表添加间距
+  row-gap: spacing.$spacing-01;
+
+  .control-form {
+    display: flex;
+    align-items: center;
+    column-gap: spacing.$spacing-03;
+
+    height: 4rem;
+  }
+}
+
+// 为 wakapi-grid 的子图表添加垂直间距
+.wakapi__subgrid {
+  row-gap: calc(#{spacing.$spacing-01} / 2);
+}
+
+cds-link, cds-overflow-menu {
+  iconify-icon {
+    color: var(--cds-icon-secondary, #525252);
+  }
+}

@@ -1,0 +1,11 @@
+@use "@carbon/styles/scss/theme";
+
+#main-content {
+  position: relative;
+}
+
+cds-header-global-action {
+  iconify-icon {
+    color: var(--cds-icon-secondary, #525252);
+  }
+}

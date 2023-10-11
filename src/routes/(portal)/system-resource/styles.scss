@@ -1,0 +1,24 @@
+@use "@carbon/styles/scss/spacing";
+
+$dashboard-chart-base-height: 80px;
+$dashboard-chart-height: $dashboard-chart-base-height * 4;
+
+.system-resource-container {
+  row-gap: var(--cds-grid-gutter-end);
+
+  cds-tile, cds-expandable-tile {
+    height: $dashboard-chart-height;
+  }
+
+  .expandable-chart-tile {
+    //height: $dashboard-chart-height * 2 + $dashboard-row-margin * 2;
+  }
+
+  .expandable-chart {
+    //height: common.$dashboard-chart-height - common.$dashboard-tile-padding * 2;
+  }
+
+  //.expandable-chart__extra {
+  //  height: $dashboard-chart-height + $dashboard-row-margin * 2;
+  //}
+}

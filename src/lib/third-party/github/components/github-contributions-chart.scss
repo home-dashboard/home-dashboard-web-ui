@@ -1,0 +1,67 @@
+.github-contributions-chart-container {
+  width: 100%;
+
+  table {
+    --svelte-cell-height: 10px;
+    --svelte-cell-width: 10px;
+    --svelte-cell-spacing-horizontal: 3px;
+    --svelte-cell-spacing-vertical: 3px;
+    --svelte-cell-level-0: #ebedf0;
+    --svelte-cell-level-1: #9be9a8;
+    --svelte-cell-level-2: #40c463;
+    --svelte-cell-level-3: #30a14e;
+    --svelte-cell-level-4: #216e39;
+
+    font-size: 12px;
+    border-collapse: separate;
+
+    border-spacing: var(--svelte-cell-spacing-horizontal) var(--svelte-cell-spacing-vertical);
+  }
+
+  caption {
+    text-align: left;
+
+    margin-bottom: 0.5em;
+  }
+
+  tr {
+    height: var(--svelte-cell-height);
+  }
+
+  th {
+    position: relative;
+
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  td {
+    width: var(--svelte-cell-width);
+  }
+
+  td[data-cell-level="0"] {
+    background-color: var(--svelte-cell-level-0);
+  }
+  td[data-cell-level="1"] {
+    background-color: var(--svelte-cell-level-1);
+  }
+  td[data-cell-level="2"] {
+    background-color: var(--svelte-cell-level-2);
+  }
+  td[data-cell-level="3"] {
+    background-color: var(--svelte-cell-level-3);
+  }
+  td[data-cell-level="4"] {
+    background-color: var(--svelte-cell-level-4);
+  }
+}
+
+.github-contributions-chart-container[data-holiday=halloween] {
+  table {
+    --svelte-cell-level-0: #ebedf0;
+    --svelte-cell-level-1: #ffee4a;
+    --svelte-cell-level-2: #ffc501;
+    --svelte-cell-level-3: #fe9600;
+    --svelte-cell-level-4: #03001c;
+  }
+}

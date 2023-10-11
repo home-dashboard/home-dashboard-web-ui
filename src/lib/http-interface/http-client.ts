@@ -81,8 +81,8 @@ export class HttpClient {
     return (await this.request<T>({ ...config, method: "GET" })).response;
   }
 
-  async post<T>(config: Omit<AjaxConfig, "method">): Promise<void> {
-    await this.request<T>({ ...config, method: "POST" });
+  async post<T = void>(config: Omit<AjaxConfig, "method">): Promise<T> {
+    return (await this.request<T>({ ...config, method: "POST" })).response;
   }
 
   async delete(config: Omit<AjaxConfig, "method">): Promise<void> {
@@ -91,6 +91,10 @@ export class HttpClient {
 
   async put<T>(config: Omit<AjaxConfig, "method">): Promise<T> {
     return (await this.request<T>({ ...config, method: "PUT" })).response;
+  }
+
+  async patch<T>(config: Omit<AjaxConfig, "method">): Promise<T> {
+    return (await this.request<T>({ ...config, method: "PATCH" })).response;
   }
 }
 

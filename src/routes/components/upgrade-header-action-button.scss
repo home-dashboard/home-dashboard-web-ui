@@ -1,0 +1,9 @@
+@use "@carbon/styles/scss/theme";
+
+.upgrade-action {
+  background: linear-gradient(to top, theme.$support-warning var(--gradient-color-stop, 100%), transparent var(--gradient-color-stop, 0%));
+
+  iconify-icon {
+    color: theme.$text-inverse;
+  }
+}

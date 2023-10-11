@@ -1,0 +1,73 @@
+@use "../../../variables";
+@use "@carbon/styles/scss/spacing";
+
+$block-class: #{variables.$project-prefix}--notifications-panel;
+
+@mixin toast-notification__override {
+  cds-toast-notification {
+    //position: relative;
+
+    width: 100%;
+    box-sizing: border-box;
+
+    .#{$block-class}__subtitle-icon {
+      margin-right: spacing.$spacing-02;
+    }
+  }
+}
+
+@mixin notifications-panel__header {
+  position: sticky;
+  z-index: 2;
+  top: 0;
+  padding: 0.5rem 1rem 1rem;
+
+  background-color: var(--cds-layer);
+
+  .#{$block-class}__header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .#{$block-class}__header {
+      font-size: 0.875rem;
+      font-weight: 600;
+      line-height: 1.28572;
+      letter-spacing: 0.16px;
+      margin: 0;
+    }
+
+    .#{$block-class}__dismiss-button {
+      color: #f4f4f4;
+    }
+  }
+
+  .#{$block-class}__do-not-disturb-toggle {
+    .cds--toggle__switch {
+      margin-top: spacing.$spacing-02;
+    }
+  }
+}
+
+cds-header-panel[expanded].#{$block-class}__wrapper {
+  width: 22.75rem;
+}
+
+.#{$block-class}__wrapper {
+  .#{$block-class} {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: auto;
+
+    .#{$block-class}__header-container {
+      @include notifications-panel__header;
+    }
+
+    .#{$block-class}__main-section {
+      @include toast-notification__override;
+    }
+  }
+}
