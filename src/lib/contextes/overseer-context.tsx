@@ -22,7 +22,7 @@ Overseer.overseerObservables.statusMessage.subscribe((value) => {
       const total = value.extra?.total;
       if (!typeIsNumber(written) || !typeIsNumber(total)) break;
 
-      value.extra.downloadPercent = ((written / total) * 100).toFixed(0);
+      value.extra.downloadPercent = Number.parseInt(((written / total) * 100).toFixed(0));
     }
   }
 
