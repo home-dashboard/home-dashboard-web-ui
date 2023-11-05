@@ -7,6 +7,10 @@
     "prepare": "husky install"
   },
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:home-dashboard/home-dashboard-web-ui.git"
+  },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^11.0.0",
@@ -72,5 +76,6 @@
     "registry": "https://registry.npmjs.org",
     "access": "public"
   },
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "packageManager": "pnpm@7.13.0"
 }
