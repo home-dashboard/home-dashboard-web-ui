@@ -79,7 +79,8 @@ export default function Index() {
         aria-label="Skip to main content"
       />
       <div id="main-content" class="pl-12 pt-12 h-full w-full" data-floating-menu-container="">
-        <cds-header aria-label="IBM Platform Name">
+        {/* zIndex 要大于 sideNav 否则 UpgradeHeaderActionButton 中的 modal 无法覆盖在 sideNav 上 */}
+        <cds-header aria-label="IBM Platform Name" style={{ "z-index": "8001" }}>
           <cds-header-menu-button
             button-label-active="Close menu"
             button-label-inactive="Open menu"

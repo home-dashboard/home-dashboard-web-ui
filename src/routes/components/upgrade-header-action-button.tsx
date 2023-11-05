@@ -6,6 +6,7 @@ import { OverseerStatusType } from "../../lib/http-interface/server-send-event";
 import { useLocation, useNavigate } from "solid-start";
 
 import "./upgrade-header-action-button.scss";
+import { Countdown } from "../../lib/components";
 
 export function UpgradeHeaderActionButton() {
   const navigate = useNavigate();
@@ -55,9 +56,45 @@ export function UpgradeHeaderActionButton() {
           when={typeIsNumber(actionButtonProps().downloadPercent)}
           fallback={<Icon slot="icon" width={20} height={20} icon={actionButtonProps().icon} />}
         >
-          <div slot="icon">{actionButtonProps().downloadPercent}%</div>
+          <div
+            slot="icon"
+            class="absolute left-0 top-0 w-full h-full flex justify-center items-center"
+          >
+            {actionButtonProps().downloadPercent}%
+          </div>
         </Show>
       </cds-header-global-action>
+
+      <cds-modal open={statusMessage().type === OverseerStatusType.RESTARTING}>
+        <cds-modal-header>
+          <cds-modal-heading>Congratulations, the upgrade is almost complete</cds-modal-heading>
+        </cds-modal-header>
+
+        <cds-modal-body>
+          <cds-modal-body-content>
+            <p>
+              The service is restarting and will return to the homepage in{" "}
+              <strong>
+                <Show when={statusMessage().type === OverseerStatusType.RESTARTING}>
+                  <Countdown
+                    time={10}
+                    interval={1000}
+                    onFinish={() => (document.location.href = "/")}
+                  />
+                </Show>{" "}
+                seconds
+              </strong>
+              . Or you can click the button below to return to the homepage.
+            </p>
+          </cds-modal-body-content>
+        </cds-modal-body>
+
+        <cds-modal-footer>
+          <cds-modal-footer-button kind="primary" onClick={() => (document.location.href = "/")}>
+            Return to the homepage
+          </cds-modal-footer-button>
+        </cds-modal-footer>
+      </cds-modal>
     </Show>
   );
 }

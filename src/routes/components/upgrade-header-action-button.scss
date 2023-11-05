@@ -6,4 +6,10 @@
   iconify-icon {
     color: theme.$text-inverse;
   }
+
+  &:not([disabled]) > div[slot="icon"] {
+    color: transparent;
+    background: linear-gradient(to top, theme.$text-secondary var(--gradient-color-stop, 100%), theme.$support-warning var(--gradient-color-stop, 0%));
+    -webkit-background-clip: text;
+  }
 }
