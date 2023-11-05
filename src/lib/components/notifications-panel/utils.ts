@@ -1,3 +1,5 @@
+import { isServer } from "../../../global-config";
+
 /**
  * 舍入毫秒为单位的时间间隔.
  *
@@ -54,7 +56,9 @@ export function roundDurationToString(duration: number): string {
   return formatDuration(value, unit);
 }
 
-const relativeFormatter = new Intl.RelativeTimeFormat(navigator.language, { numeric: "auto" });
+const relativeFormatter = new Intl.RelativeTimeFormat(isServer ? "en-US" : navigator.language, {
+  numeric: "auto"
+});
 function formatDuration(duration: number, unit: Intl.RelativeTimeFormatUnitSingular): string {
   return relativeFormatter.format(duration, unit);
 }

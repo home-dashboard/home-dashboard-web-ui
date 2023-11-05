@@ -1,4 +1,5 @@
 import { typeIsObject } from "@siaikin/utils";
+import { isServer } from "../../global-config";
 
 type InternalIntlPropType = {
   locales?: string | string[];
@@ -7,7 +8,7 @@ type InternalIntlPropType = {
 export type IntlPropType = InternalIntlPropType | string | string[];
 
 export const DefaultIntlProp: InternalIntlPropType = {
-  locales: (navigator.languages as string[]) || navigator.language,
+  locales: isServer ? "en-US" : (navigator.languages as string[]) || navigator.language,
   options: { dateStyle: "full" }
 };
 

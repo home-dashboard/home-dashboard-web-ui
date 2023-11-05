@@ -1,4 +1,5 @@
 import { BehaviorSubject } from "rxjs";
+import { isServer } from "../../global-config";
 
 function visibilityStateToBoolean(state: DocumentVisibilityState): boolean {
   switch (state) {
@@ -21,7 +22,7 @@ export function observe(): [BehaviorSubject<boolean>, () => void] {
   return [subject, () => document.removeEventListener("visibilitychange", handle)];
 }
 
-const [subject] = observe();
+const [subject] = isServer ? [new BehaviorSubject(true)] : observe();
 
 export const documentVisibilityStatusObservable = subject.asObservable();
 

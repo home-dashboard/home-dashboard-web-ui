@@ -1,5 +1,6 @@
 import { BehaviorSubject } from "rxjs";
 import { notUAN } from "@siaikin/utils";
+import { isServer } from "../../global-config";
 
 /**
  * Pixel sizes of Carbon grid breakpoints.
@@ -58,7 +59,7 @@ export function observe() {
   } as const;
 
   // 仅在浏览器环境下才需要监听断点变化
-  if (!notUAN(typeof window)) return [subject, methods, () => {}] as const;
+  if (isServer) return [subject, methods, () => {}] as const;
 
   const match = {
     sm: window.matchMedia(`(max-width: ${breakpoints.md.width}px)`),
