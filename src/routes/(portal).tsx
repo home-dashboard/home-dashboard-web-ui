@@ -1,4 +1,4 @@
-import { createMemo, createSignal, For, onMount, Show } from "solid-js";
+import { createMemo, createSignal, For, onMount, Show, Suspense } from "solid-js";
 import { Icon } from "@iconify-icon/solid";
 import { NotificationsPanel } from "../lib/components";
 import {
@@ -193,14 +193,23 @@ export default function Index() {
         </cds-side-nav>
 
         <main class="cds--content h-full">
-          <Show when={!preloadData.loading}>
-            <SystemInfoContext.Provider
-              systemInfo={preloadData()!.systemInfo}
-              versionInfo={preloadData()!.versionInfo}
+          <Suspense>
+            <Show
+              when={!preloadData.loading}
+              fallback={
+                <div class="flex w-full h-full justify-center items-center">
+                  <cds-loading assistive-text="Loading" />
+                </div>
+              }
             >
-              <Outlet />
-            </SystemInfoContext.Provider>
-          </Show>
+              <SystemInfoContext.Provider
+                systemInfo={preloadData()!.systemInfo}
+                versionInfo={preloadData()!.versionInfo}
+              >
+                <Outlet />
+              </SystemInfoContext.Provider>
+            </Show>
+          </Suspense>
         </main>
       </div>
     </>
