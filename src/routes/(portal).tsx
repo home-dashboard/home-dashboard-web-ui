@@ -15,14 +15,6 @@ import { DefaultFormatter } from "../lib/utils/intl-utils";
 
 import "./(portal).scss";
 
-const thirdPartySideItems = [
-  {
-    icon: "simple-icons:wakatime",
-    text: "Wakapi Summary",
-    href: "/third-party/wakapi"
-  }
-];
-
 const sideItems = [
   {
     icon: "carbon:dashboard",
@@ -38,6 +30,19 @@ const sideItems = [
     icon: "carbon:cloud-logging",
     text: "Process Monitoring",
     href: "/system-process"
+  },
+  {
+    icon: "carbon:bookmark",
+    text: "Bookmark",
+    href: "/bookmark"
+  }
+];
+
+const thirdPartySideItems = [
+  {
+    icon: "simple-icons:wakatime",
+    text: "Wakapi Summary",
+    href: "/third-party/wakapi"
   }
 ];
 
@@ -78,7 +83,11 @@ export default function Index() {
         role="navigation"
         aria-label="Skip to main content"
       />
-      <div id="main-content" class="pl-12 pt-12 h-full w-full" data-floating-menu-container="">
+      <div
+        id="main-content"
+        class="pl-12 pt-12 h-full w-full overflow-hidden"
+        data-floating-menu-container=""
+      >
         {/* zIndex 要大于 sideNav 否则 UpgradeHeaderActionButton 中的 modal 无法覆盖在 sideNav 上 */}
         <cds-header aria-label="IBM Platform Name" style={{ "z-index": "8001" }}>
           <cds-header-menu-button
@@ -192,7 +201,7 @@ export default function Index() {
           </cds-side-nav-items>
         </cds-side-nav>
 
-        <main class="cds--content h-full">
+        <main class="portal-content cds--content h-full overflow-auto">
           <Suspense>
             <Show
               when={!preloadData.loading}

@@ -4,6 +4,7 @@ import WakapiGrid from "./wakapi-grid";
 import GitHubGrid from "./github-grid";
 
 import "./styles.scss";
+import ShortcutGrid from "./shortcut-grid";
 
 export default function Index() {
   const [configuration] = ConfigurationContext.useContext();
@@ -16,14 +17,17 @@ export default function Index() {
   );
 
   return (
-    <div class="wakapi-grid cds--css-grid cds--css-grid--full-width">
+    <div class="dashboard-container cds--css-grid cds--css-grid--full-width grid-flow-row-dense">
       <Show when={wakapiEnabled()}>
-        <div class="cds--css-grid-column cds--sm:col-span-4 cds--md:col-span-8 cds--lg:col-span-12 cds--xlg:col-span-8 cds--max:col-span-8">
+        <div class="cds--css-grid-column cds--sm:col-span-4 cds--md:col-span-8 cds--lg:col-span-16 cds--xlg:col-span-10 cds--max:col-span-10">
           <WakapiGrid />
         </div>
       </Show>
+      <div class="cds--css-grid-column cds--sm:col-span-4 cds--md:col-span-4 cds--lg:col-span-8 cds--xlg:col-span-6 cds--max:col-span-6">
+        <ShortcutGrid />
+      </div>
       <Show when={githubEnabled()}>
-        <div class="cds--css-grid-column cds--sm:col-span-4 cds--md:col-span-8 cds--lg:col-span-4 cds--xlg:col-span-4 cds--max:col-span-4">
+        <div class="cds--css-grid-column cds--sm:col-span-4 cds--md:col-span-4 cds--lg:col-span-8 cds--xlg:col-span-8 cds--max:col-span-8">
           <GitHubGrid />
         </div>
       </Show>

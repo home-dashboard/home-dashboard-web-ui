@@ -1,10 +1,25 @@
 @use "@carbon/styles/scss/theme";
+@use "@carbon/styles/scss/spacing";
+@use "@carbon/styles/scss/breakpoint";
 
 #main-content {
   position: relative;
 }
 
 cds-header-global-action {
+  iconify-icon {
+    color: var(--cds-icon-secondary, #525252);
+  }
+}
+
+.portal-content {
+  @include breakpoint.breakpoint-down(lg) {
+    padding: spacing.$spacing-05 !important;
+  }
+}
+
+
+cds-link, cds-overflow-menu {
   iconify-icon {
     color: var(--cds-icon-secondary, #525252);
   }

@@ -52,7 +52,7 @@ export default function NotificationsPanel(props: VoidProps<{ expanded: boolean 
             <cds-button
               class={`${blockClass}__dismiss-button`}
               kind="ghost"
-              size="small"
+              size="sm"
               onClick={markAllAsRead}
             >
               Clear all

@@ -1,0 +1,6 @@
+@use 'sass:map';
+@use "@carbon/styles/scss/type";
+
+.favorite-container {
+  row-gap: var(--cds-grid-gutter-end);
+}

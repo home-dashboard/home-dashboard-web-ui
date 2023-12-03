@@ -15,6 +15,7 @@ import {
   createSignal,
   For,
   mergeProps,
+  onCleanup,
   onMount,
   Show,
   splitProps,
@@ -151,10 +152,12 @@ export default function GitHubContributionsChart(
   const [tableElementRect, setTableElementRect] = createSignal<DOMRectReadOnly>();
   let tableElement: HTMLDivElement | undefined;
   onMount(() => elementRect.watch(tableElement!, setTableElementRect));
+  onCleanup(() => elementRect.unwatch(tableElement!));
 
   const [measuredElementRect, setMeasuredElementRect] = createSignal<DOMRectReadOnly>();
   let measuredElement: HTMLTableCellElement | undefined;
   onMount(() => elementRect.watch(measuredElement!, setMeasuredElementRect));
+  onCleanup(() => elementRect.unwatch(measuredElement!));
 
   const columnCount = createMemo(() => {
     const _tableElementRect = tableElementRect();

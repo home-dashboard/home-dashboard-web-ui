@@ -1,5 +1,9 @@
 @use "@carbon/styles/scss/spacing";
 
+.dashboard-container {
+  row-gap: var(--cds-grid-gutter-end);
+}
+
 .wakapi-grid,
 .github-grid {
   // 为 wakapi-grid 和 github-grid 的标题和图表添加间距
@@ -17,10 +21,4 @@
 // 为 wakapi-grid 的子图表添加垂直间距
 .wakapi__subgrid {
   row-gap: calc(#{spacing.$spacing-01} / 2);
-}
-
-cds-link, cds-overflow-menu {
-  iconify-icon {
-    color: var(--cds-icon-secondary, #525252);
-  }
 }

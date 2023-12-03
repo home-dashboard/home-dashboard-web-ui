@@ -72,7 +72,7 @@ export default function WakapiGrid() {
             </p>
           </header>
 
-          <Show when={largerThan("sm")}>
+          <Show when={largerThan("md")}>
             <cds-form-item class="flex-none">
               <cds-slider
                 label-text={`Maximum display ${controlFormData().max} items (0 for unlimited)`}

@@ -1,9 +1,20 @@
-import { Setter } from "solid-js";
+import { createEffect, createSignal, on, onCleanup, Setter } from "solid-js";
 
 export const elementRect = {
   watch: watchElementReact,
-  unwatch: unwatchElementReact
+  unwatch: unwatchElementReact,
+  watchWithRef: watchElementReactWithRef
 };
+
+function watchElementReactWithRef() {
+  const [element, setElement] = createSignal<HTMLElement>();
+  onCleanup(() => element() && unwatchElementReact(element()!));
+
+  const [rect, setRect] = createSignal<DOMRectReadOnly>();
+  createEffect(on(element, (el) => el && watchElementReact(el, setRect)));
+
+  return [rect, { setElement }] as const;
+}
 
 /**
  * 监听元素的尺寸变化

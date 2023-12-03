@@ -62,17 +62,17 @@ export function observe() {
   if (isServer) return [subject, methods, () => {}] as const;
 
   const match = {
-    sm: window.matchMedia(`(max-width: ${breakpoints.md.width}px)`),
+    sm: window.matchMedia(`(max-width: ${breakpoints.md.width - 1}px)`),
     md: window.matchMedia(
-      `(min-width: ${breakpoints.md.width}px) and (max-width: ${breakpoints.lg.width}px)`
+      `(min-width: ${breakpoints.md.width}px) and (max-width: ${breakpoints.lg.width - 1}px)`
     ),
     lg: window.matchMedia(
-      `(min-width: ${breakpoints.lg.width}px) and (max-width: ${breakpoints.xlg.width}px)`
+      `(min-width: ${breakpoints.lg.width}px) and (max-width: ${breakpoints.xlg.width - 1}px)`
     ),
     xlg: window.matchMedia(
-      `(min-width: ${breakpoints.xlg.width}px) and (max-width: ${breakpoints.max.width}px)`
+      `(min-width: ${breakpoints.xlg.width}px) and (max-width: ${breakpoints.max.width - 1}px)`
     ),
-    max: window.matchMedia(`(min-width: ${breakpoints.max.width}px)`)
+    max: window.matchMedia(`(min-width: ${breakpoints.max.width - 1}px)`)
   } as const;
   const matchers = Object.entries(match) as Array<[Breakpoint, MediaQueryList]>;
   const sizeByMedia = Object.fromEntries(

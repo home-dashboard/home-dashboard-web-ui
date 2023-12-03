@@ -2,6 +2,7 @@ import { ajax, AjaxResponse } from "rxjs/ajax";
 import type { AjaxConfig } from "rxjs/ajax";
 import { auditTime, catchError, iif, lastValueFrom, Observable, retry, Subject, timer } from "rxjs";
 import { BASE_URL as baseUrl, HTTP_RESPONSE_DELAY } from "../../global-config";
+import { notUAN, typeIsArray, typeIsObject } from "@siaikin/utils";
 
 const includeHostRegexp = /^http[s]?:\/\//;
 
@@ -17,13 +18,7 @@ export class HttpClient {
   systemErrorObservable: Observable<ResponseInternalError> = this.systemErrorSubject.asObservable();
 
   request<T>(config: AjaxConfig): Promise<AjaxResponse<T>> {
-    config.withCredentials = true;
-
-    if (!includeHostRegexp.test(config.url)) {
-      const url = config.url;
-
-      config.url = `${this.baseUrl}/${config.url.startsWith("/") ? url.slice(1) : url}`;
-    }
+    this.handleRequestConfig(config);
 
     const obs$ = iif(
       () => config.method === "GET",
@@ -36,26 +31,12 @@ export class HttpClient {
             if (error.status !== 401) return timer(2 ** (count - 1) * 500);
 
             throw error;
-          },
+          }
         })
       ),
       ajax<T>(config)
     ).pipe(
       auditTime(HTTP_RESPONSE_DELAY),
-      // map((response) => {
-      //   console.log(response);
-      //   return response;
-      //   // const _response = response.response;
-      //   // let result;
-      //   //
-      //   // if (!result) throw new Error(`response is undefined`);
-      //   //
-      //   // if (result.success) {
-      //   //   return result;
-      //   // } else {
-      //   //   throw new HTTPInnerError(`${result.errorMsg}`, result.code);
-      //   // }
-      // }),
       catchError((error) => {
         const response = error.response;
 
@@ -67,10 +48,6 @@ export class HttpClient {
         this.systemErrorSubject.next(responseError);
 
         throw responseError;
-
-        // const message = `[${typeIsNumber(response.code) ? response.code : "UNKNOWN"}] ${
-        //   response.message
-        // }`;
       })
     );
 
@@ -95,6 +72,41 @@ export class HttpClient {
 
   async patch<T>(config: Omit<AjaxConfig, "method">): Promise<T> {
     return (await this.request<T>({ ...config, method: "PATCH" })).response;
+  }
+
+  /**
+   * 使用 navigator.sendBeacon 发送请求
+   * @param config
+   */
+  sendBeacon(config: Omit<AjaxConfig, "method">): boolean {
+    this.handleRequestConfig(config);
+
+    return navigator.sendBeacon(`${config.url}?${config.queryParams}`, JSON.stringify(config.body));
+  }
+
+  protected handleRequestConfig(config: AjaxConfig): void {
+    config.withCredentials = true;
+
+    if (!includeHostRegexp.test(config.url)) {
+      const url = config.url;
+
+      config.url = `${this.baseUrl}/${config.url.startsWith("/") ? url.slice(1) : url}`;
+    }
+
+    if (notUAN(config.queryParams) && typeIsObject(config.queryParams)) {
+      const searchParams = new URLSearchParams();
+      const keys = Object.keys(config.queryParams);
+      for (let i = keys.length; i--; ) {
+        const key = keys[i];
+        const value = config.queryParams[key];
+
+        (typeIsArray(value) ? value : [value]).forEach((v) =>
+          searchParams.append(key, v.toString())
+        );
+      }
+
+      config.queryParams = searchParams.toString();
+    }
   }
 }
 

@@ -1,0 +1,13 @@
+@use "@carbon/styles/scss/type";
+@use "@carbon/styles/scss/spacing";
+@use "@carbon/styles/scss/breakpoint";
+
+.section__title {
+  @include type.type-style('heading-02');
+
+  margin-bottom: spacing.$spacing-02;
+}
+
+.section__items {
+  row-gap: var(--cds-grid-gutter-end);
+}

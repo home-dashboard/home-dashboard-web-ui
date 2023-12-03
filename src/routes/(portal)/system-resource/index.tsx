@@ -59,7 +59,7 @@ export default function Index() {
           expanded={expandStates[0]}
           on:cds-expandable-tile-toggled={(event: CustomEvent) => handleChartClick(event, 0)}
         >
-          <cds-tile-above-the-fold-content>
+          <cds-tile-above-the-fold-content slot="above-the-fold-content">
             <RealtimeMemoryChart />
           </cds-tile-above-the-fold-content>
           <cds-tile-below-the-fold-content>
@@ -73,7 +73,7 @@ export default function Index() {
           expanded={expandStates[1]}
           on:cds-expandable-tile-toggled={(event: CustomEvent) => handleChartClick(event, 1)}
         >
-          <cds-tile-above-the-fold-content>
+          <cds-tile-above-the-fold-content slot="above-the-fold-content">
             <RealtimeCpuChart />
           </cds-tile-above-the-fold-content>
           <cds-tile-below-the-fold-content>

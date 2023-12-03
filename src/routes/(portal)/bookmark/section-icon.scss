@@ -1,0 +1,13 @@
+@use "@carbon/styles/scss/type";
+@use "@carbon/styles/scss/spacing";
+@use "@carbon/styles/scss/breakpoint";
+
+.section-icon {
+  padding: spacing.$spacing-02;
+
+  &.icon-type__url {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+  }
+}

@@ -195,7 +195,7 @@ export default function Index() {
                     </div>
                   </div>
                   <cds-button size="md" on:click={() => setSearchFormModalOpened(true)}>
-                    <Icon slot="icon" icon="carbon:filter" />
+                    <Icon slot="icon" width={16} height={16} icon="carbon:filter" />
                   </cds-button>
                 </div>
               </cds-form-group>

@@ -1,0 +1,66 @@
+@use "@carbon/styles/scss/type";
+@use "@carbon/styles/scss/spacing";
+@use "@carbon/styles/scss/breakpoint";
+
+.section-item {
+  overflow: hidden;
+
+  min-width: unset;
+  min-height: unset;
+
+  & > .section-item__content.section-item--small {
+    font-size: 0.5rem;
+  }
+
+  & > .section-item__content.section-item--medium {
+    font-size: 0.5rem;
+  }
+
+  & > .section-item__content.section-item--large {
+    font-size: 1.5rem;
+  }
+
+  & > .section-item__content {
+    flex: 1 1 auto;
+
+    display: flex;
+
+    overflow: hidden;
+
+    column-gap: spacing.$spacing-02;
+
+    @include type.type-style("caption-01");
+
+    & > .section-item__icon {
+      align-self: center;
+
+      @include breakpoint.breakpoint-up(md) {
+        font-size: 4em;
+      }
+      @include breakpoint.breakpoint-down(md) {
+        font-size: 4em;
+      }
+    }
+
+    & > .section-item__details {
+      flex: 1 1 auto;
+
+      display: flex;
+      flex-direction: column;
+
+      overflow: hidden;
+
+      & > .section-item__title {
+        @include type.type-style("heading-01");
+      }
+
+      & > .section-item__description {
+        @include type.type-style("body-01");
+      }
+
+      & > .section-item__time {
+        @include type.type-style("legal-01");
+      }
+    }
+  }
+}

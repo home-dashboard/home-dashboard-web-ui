@@ -22,12 +22,16 @@ export function handleCDSInput(
   { name, setter }: { name: string; setter: ReturnType<typeof createForm<any, any>>["setFields"] },
   event: CustomEvent
 ) {
+  setter(name, getCDSInputValue(event), true);
+}
+
+export function getCDSInputValue(event: CustomEvent) {
   const element = (event.currentTarget ?? event.target) as HTMLInputElement;
   const nodeName = element.nodeName.toLowerCase();
 
   if (nodeName.includes("checkbox") || nodeName.includes("radio")) {
-    setter(name, element.checked, true);
+    return element.checked;
   } else {
-    setter(name, element.value, true);
+    return element.value;
   }
 }
