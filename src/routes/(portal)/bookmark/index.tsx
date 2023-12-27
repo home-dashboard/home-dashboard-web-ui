@@ -5,6 +5,7 @@ import {
   deleteShortcutSection,
   deleteShortcutSectionItems,
   listShortcutSections,
+  refreshCachedShortcutItemImageIcon,
   ShortcutItem,
   ShortcutSection,
   updateShortcutSection
@@ -28,6 +29,11 @@ export default function Index() {
       (data) => typeIsArray(data) && setSectionStore(reconcile({ sections: data }, { key: "id" }))
     )
   );
+
+  async function handleSectionRefreshImageIconCache(section: ShortcutSection) {
+    await refreshCachedShortcutItemImageIcon(section.id);
+    await refetchSections();
+  }
 
   async function handleItemsDelete(
     section: ShortcutSection,
@@ -97,6 +103,7 @@ export default function Index() {
                   section={section}
                   onRemove={() => setSectionDeleteStore({ opened: true, section })}
                   onEdit={() => setSectionCreateStore({ opened: true, type: "edit", section })}
+                  onRefreshItemImageIconCache={() => handleSectionRefreshImageIconCache(section)}
                   onRemoveItems={(ids, permanently) => handleItemsDelete(section, ids, permanently)}
                   onCreateItem={(data) => handleItemCreate(section, data)}
                 />

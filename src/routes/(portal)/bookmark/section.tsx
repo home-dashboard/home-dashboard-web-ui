@@ -8,7 +8,7 @@ import {
   splitProps,
   VoidProps
 } from "solid-js";
-import { deleteShortcutSection, ShortcutItem, ShortcutSection } from "../../../lib/http-interface";
+import { ShortcutItem, ShortcutSection } from "../../../lib/http-interface";
 import { Icon } from "@iconify-icon/solid";
 import { SectionItem } from "./section-item";
 import { createStore } from "solid-js/store";
@@ -18,7 +18,7 @@ import "./section.scss";
 import { SectionItemModal } from "./section-item-modal";
 import { SectionIcon } from "./section-icon";
 import { ReactiveMap } from "@solid-primitives/map";
-import { getCDSInputValue, handleCDSInput } from "../../../lib/utils/felte-utils";
+import { getCDSInputValue } from "../../../lib/utils/felte-utils";
 
 export function Section(
   props: VoidProps<
@@ -29,6 +29,7 @@ export function Section(
       onEdit?: () => Promise<void> | void;
       onRemoveItems?: (items: Array<number>, permanently: boolean) => Promise<void> | void;
       onCreateItem?: (data: ShortcutItem) => Promise<void> | void;
+      onRefreshItemImageIconCache?: () => Promise<void> | void;
     } & JSX.HTMLAttributes<HTMLDivElement>
   >
 ) {
@@ -38,7 +39,8 @@ export function Section(
     "onRemove",
     "onEdit",
     "onRemoveItems",
-    "onCreateItem"
+    "onCreateItem",
+    "onRefreshItemImageIconCache"
   ]);
   const mergedProps = mergeProps({ size: "md" }, localProps);
 
@@ -91,6 +93,9 @@ export function Section(
               <cds-overflow-menu-body>
                 <cds-overflow-menu-item onClick={() => mergedProps.onEdit?.()}>
                   Edit
+                </cds-overflow-menu-item>
+                <cds-overflow-menu-item onClick={() => mergedProps.onRefreshItemImageIconCache?.()}>
+                  Refresh icon cache
                 </cds-overflow-menu-item>
                 <cds-overflow-menu-item
                   divider={true}

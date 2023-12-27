@@ -1,6 +1,7 @@
 import { isServer as _isServer } from "solid-js/web";
 
 export const BASE_URL = "/v1/web";
+export const BASE_FILE_URL = "/v1/file";
 export const HTTP_RESPONSE_DELAY = 250;
 export const isServer = _isServer;
 

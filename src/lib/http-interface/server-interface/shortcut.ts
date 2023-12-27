@@ -59,6 +59,10 @@ export async function refreshShortcutIcons(): Promise<void> {
   return httpClient.get({ url: "shortcut/icon/refresh" });
 }
 
+export async function refreshCachedShortcutItemImageIcon(sectionId: number): Promise<void> {
+  return httpClient.put({ url: `shortcut/item/refresh-image-icon-cache/${sectionId}` });
+}
+
 export function sendShortcutSectionItemUsage(usages: Array<ShortcutSectionItemUsage>): boolean {
   return httpClient.sendBeacon({
     url: "shortcut/usage/collect",
@@ -89,6 +93,7 @@ export interface ShortcutItem extends Model {
   description: string;
   url: string;
   iconType: ShortcutItemIconType;
+  iconCachedUrl: string;
   iconUrl: string;
   iconText: string;
   iconId: number;

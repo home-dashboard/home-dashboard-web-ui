@@ -3,6 +3,7 @@ import { ShortcutItem, ShortcutItemIconType } from "../../../lib/http-interface"
 import { Icon, IconifyIconProps } from "@iconify-icon/solid";
 
 import "./section-icon.scss";
+import { BASE_FILE_URL } from "../../../global-config";
 
 export function SectionIcon(
   props: VoidProps<
@@ -39,7 +40,9 @@ export function SectionIcon(
         <img
           {...otherProps}
           class={`section-icon icon-type__url ${otherProps.class}`}
-          src={item().iconUrl}
+          src={
+            item().iconCachedUrl ? `${BASE_FILE_URL}/${item().iconCachedUrl}` : `${item().iconUrl}`
+          }
           alt={item().title}
         />
       </Match>
