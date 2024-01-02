@@ -1,4 +1,4 @@
-import { createMemo, JSX, Match, mergeProps, splitProps, Switch, VoidProps } from "solid-js";
+import { createMemo, JSX, Match, mergeProps, Show, splitProps, Switch, VoidProps } from "solid-js";
 import { ShortcutItem, ShortcutItemIconType } from "../../../lib/http-interface";
 import { Icon, IconifyIconProps } from "@iconify-icon/solid";
 
@@ -32,8 +32,8 @@ export function SectionIcon(
         <Icon
           {...(otherProps as IconifyIconProps)}
           class={`section-icon icon-type__icon ${otherProps.class}`}
-          style={{ color: item().icon.color }}
-          icon={`simple-icons:${item().icon.slug}`}
+          style={item().icon.color ? { color: item().icon.color } : {}}
+          icon={item().icon.slug ? `simple-icons:${item().icon.slug}` : "carbon:no-image"}
         />
       </Match>
       <Match when={item().iconType === ShortcutItemIconType.Url}>

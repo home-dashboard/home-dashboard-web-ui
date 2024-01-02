@@ -1,0 +1,12 @@
+.sticky-list-item {
+  &::before {
+    position: sticky;
+    top: 180px;
+    z-index: 10;
+  }
+
+  & > .sticky-list-item__title {
+    position: sticky;
+    top: 180px;
+  }
+}

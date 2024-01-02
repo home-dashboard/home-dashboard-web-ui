@@ -17,11 +17,11 @@ export class HttpClient {
 
   systemErrorObservable: Observable<ResponseInternalError> = this.systemErrorSubject.asObservable();
 
-  request<T>(config: AjaxConfig): Promise<AjaxResponse<T>> {
+  request<T>(config: AjaxConfig, options: GetRequestOptions = {}): Promise<AjaxResponse<T>> {
     this.handleRequestConfig(config);
 
     const obs$ = iif(
-      () => config.method === "GET",
+      () => config.method === "GET" && options.retry !== false,
       ajax<T>(config).pipe(
         retry({
           count: 3,
@@ -54,8 +54,8 @@ export class HttpClient {
     return lastValueFrom(obs$);
   }
 
-  async get<T>(config: Omit<AjaxConfig, "method">): Promise<T> {
-    return (await this.request<T>({ ...config, method: "GET" })).response;
+  async get<T>(config: Omit<AjaxConfig, "method">, options: GetRequestOptions = {}): Promise<T> {
+    return (await this.request<T>({ ...config, method: "GET" }, options)).response;
   }
 
   async post<T = void>(config: Omit<AjaxConfig, "method">): Promise<T> {
@@ -81,7 +81,8 @@ export class HttpClient {
   sendBeacon(config: Omit<AjaxConfig, "method">): boolean {
     this.handleRequestConfig(config);
 
-    return navigator.sendBeacon(`${config.url}?${config.queryParams}`, JSON.stringify(config.body));
+    console.log(config);
+    return navigator.sendBeacon(config.url, JSON.stringify(config.body));
   }
 
   protected handleRequestConfig(config: AjaxConfig): void {
@@ -120,4 +121,7 @@ export class ResponseInternalError extends Error {
   httpStatus: number;
 }
 
+export type GetRequestOptions = Partial<{
+  retry: boolean;
+}>;
 export const httpClient = new HttpClient(baseUrl);

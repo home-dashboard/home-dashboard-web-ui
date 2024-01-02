@@ -18,6 +18,7 @@ import { HDLoadingButton } from "../../../lib/components/button";
 import { createStore, reconcile } from "solid-js/store";
 import { SectionModal } from "./section-modal";
 import { typeIsArray } from "@siaikin/utils";
+import { BookmarkImportModal } from "./bookmark-import-modal";
 
 export default function Index() {
   const [sectionStore, setSectionStore] = createStore({ sections: [] as Array<ShortcutSection> });
@@ -86,11 +87,27 @@ export default function Index() {
     await refetchSections();
   }
 
+  const [sectionImportStore, setSectionImportStore] = createStore({
+    opened: false
+  });
+  async function handleImportComplete() {
+    setSectionImportStore({ opened: false });
+    await refetchSections();
+  }
+
   return (
     <>
       <div class="favorite-container cds--css-grid cds--css-grid--full-width cds--css-grid--narrow">
-        <div class="cds--css-grid-column cds--sm:col-span-4 cds--md:col-span-8 cds--lg:col-span-16 text-right">
-          <cds-button kind="tertiary" onClick={() => setSectionCreateStore({ opened: true })}>
+        <div class="cds--css-grid-column cds--sm:col-span-4 cds--md:col-span-8 cds--lg:col-span-16">
+          <cds-button onClick={() => setSectionImportStore({ opened: true })}>
+            <Icon slot="icon" width={16} height={16} icon="carbon:document-import" />
+            Import From File
+          </cds-button>
+          <cds-button
+            class="float-right"
+            kind="tertiary"
+            onClick={() => setSectionCreateStore({ opened: true })}
+          >
             <Icon slot="icon" width={16} height={16} icon="carbon:add-large" />
             Add Folder
           </cds-button>
@@ -147,6 +164,11 @@ export default function Index() {
           </HDLoadingButton>
         </cds-modal-footer>
       </cds-modal>
+
+      <BookmarkImportModal
+        open={sectionImportStore.opened}
+        onClose={() => handleImportComplete()}
+      />
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { httpClient } from "../http-client";
+import { GetRequestOptions, httpClient } from "../http-client";
 import { Model } from "./common";
 
 export async function createShortcutSection(section: ShortcutSection): Promise<number> {
@@ -31,12 +31,17 @@ export async function deleteShortcutSectionItems(
 }
 
 export async function extractShortcutItemInfoFromURL(
-  url: string
+  url: string,
+  options?: GetRequestOptions
 ): Promise<{ alternatives: Array<ShortcutItem>; item: ShortcutItem }> {
-  return httpClient.get({
-    url: "shortcut/item/extract-from-url",
-    queryParams: { url }
-  });
+  return httpClient.get(
+    {
+      url: "shortcut/item/extract-from-url",
+      queryParams: { url },
+      timeout: 10 * 1000
+    },
+    options
+  );
 }
 
 export async function createShortcutItem(item: ShortcutItem): Promise<number> {
