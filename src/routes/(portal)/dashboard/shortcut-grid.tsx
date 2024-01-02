@@ -1,4 +1,13 @@
-import { createEffect, createResource, createSignal, For, Match, Show, Switch } from "solid-js";
+import {
+  createEffect,
+  createMemo,
+  createResource,
+  createSignal,
+  For,
+  Match,
+  Show,
+  Switch
+} from "solid-js";
 import {
   listShortcutSections,
   sendShortcutSectionItemUsage,
@@ -10,7 +19,7 @@ import {
 import { SquareRender } from "../../../lib/squarified-treemap";
 import { SectionIcon } from "../bookmark/section-icon";
 import { BreakpointsContext, DocumentStatusContext } from "../../../lib/contextes";
-import { notUAN, typeIsArray } from "@siaikin/utils";
+import { notUAN } from "@siaikin/utils";
 
 import "./shortcut-grid.scss";
 import { SectionItem, SectionItemSizeType } from "../bookmark/section-item";
@@ -24,7 +33,7 @@ type ShortcutTreeNodeMap = {
   Section: Omit<ShortcutSection, "items"> & {
     type: "section";
     items: Array<ShortcutTreeNodeMap[keyof ShortcutTreeNodeMap]>;
-  } & ShortcutTreeNode;
+  };
   SectionItem: ShortcutItem & { type: "item" | "rest" } & ShortcutTreeNode;
 };
 
@@ -34,58 +43,42 @@ export default function ShortcutGrid() {
 
   const [sectionInfo] = createResource(async () => {
     const sections = await listShortcutSections();
-    const defaultSectionIndex = sections.findIndex((section) => section.default);
-    const defaultSection = sections[defaultSectionIndex];
 
-    const result: ShortcutTreeNodeMap["Section"] = {
-      type: "section",
-      ...defaultSection,
-      items: [],
-      usages: [{ clickCount: 1 }]
-    };
-    const sectionMap = new Map<number, ShortcutTreeNodeMap["Section"]>([[result.id, result]]);
+    const sectionMap = new Map<number, ShortcutTreeNodeMap["Section"]>();
 
     for (let i = 0; i < sections.length; i++) {
       const section = sections[i];
-      const { items, id } = section;
+      const { items } = section;
 
-      for (let j = items.length; j--; ) {
-        const item = items[j];
-        if (typeIsArray(item.usages) && item.usages.length > 0) continue;
+      // 补全没有使用过的 item
+      items.forEach(
+        (item) =>
+          (item.usages ?? []).length <= 0 &&
+          (item.usages = [{ clickCount: 1 } as ShortcutSectionItemUsage])
+      );
 
-        item.usages = [{ clickCount: 1 } as ShortcutSectionItemUsage];
-      }
-
-      if (id === defaultSection.id) {
-        result.items = result.items.concat(
-          items.map((item) => ({ ...item, type: "item" }) as ShortcutTreeNodeMap["SectionItem"])
-        );
-      } else {
-        const sectionNode: ShortcutTreeNodeMap["Section"] = {
-          type: "section",
-          ...section,
-          items: items.map(
-            (item) => ({ ...item, type: "item" }) as ShortcutTreeNodeMap["SectionItem"]
-          ),
-          usages: [
-            {
-              clickCount: items.reduce((pre, cur) => pre + cur.usages[0].clickCount, 0)
-            }
-          ]
-        };
-        result.items.push(sectionNode);
-        sectionMap.set(sectionNode.id, sectionNode);
-      }
+      const sectionNode: ShortcutTreeNodeMap["Section"] = {
+        type: "section",
+        ...section,
+        items: items.map(
+          (item) => ({ ...item, type: "item" }) as ShortcutTreeNodeMap["SectionItem"]
+        )
+      };
+      sectionMap.set(sectionNode.id, sectionNode);
     }
 
     return {
-      rootSection: result,
+      defaultSection: sectionMap.get(sections[0].id),
       sectionMap
     };
   });
 
   const [currentSection, setCurrentSection] = createSignal<ShortcutTreeNodeMap["Section"]>();
-  createEffect(() => sectionInfo() && setCurrentSection(sectionInfo()?.rootSection));
+  createEffect(() => sectionInfo() && setCurrentSection(sectionInfo()?.defaultSection));
+  const currentSectionTreemapData = createMemo(() => {
+    const _currentSection = currentSection();
+    return { ..._currentSection } as ShortcutTreeNodeMap["Section"];
+  });
 
   const usageMap = new Map<string, ShortcutSectionItemUsage>();
   function handleFavoriteClick(item: ShortcutTreeNodeMap[keyof ShortcutTreeNodeMap]) {
@@ -126,6 +119,10 @@ export default function ShortcutGrid() {
         break;
     }
   }
+
+  /**
+   * 页面可见状态发生变化时发送统计数据.
+   */
   createEffect(() => {
     if (visibleStatus() || usageMap.size <= 0) return;
 
@@ -162,18 +159,19 @@ export default function ShortcutGrid() {
 
         <Switch>
           <Match when={viewMode() === "treemap"}>
-            <SquareRender
-              gap={"1px"}
-              each={currentSection()?.items}
-              weight={(item) => item.usages[0].clickCount}
-              rest={(weight, restChildren) =>
+            <SquareRender<ShortcutTreeNodeMap[keyof ShortcutTreeNodeMap]>
+              gap={2}
+              root={currentSectionTreemapData()!}
+              rootChildren={(item) => (item.type === "section" ? item.items : [])}
+              weight={(item) => (item.type === "section" ? 0 : item.usages[0].clickCount)}
+              rest={(weight, sum, restChildren) =>
                 ({
                   type: "rest",
                   title: `${restChildren.length}`,
-                  usages: [{ clickCount: weight }]
+                  usages: [{ clickCount: Math.max(Math.floor(sum / 16), 1) }]
                 }) as ShortcutTreeNodeMap["SectionItem"]
               }
-              class="flex-auto"
+              class="flex-auto overflow-hidden"
             >
               {(item) => (
                 <cds-clickable-tile
@@ -184,15 +182,14 @@ export default function ShortcutGrid() {
                     switch (item.type) {
                       case "item":
                         return (
-                          <div class="square-shortcut-item__content">
+                          <div class="square-shortcut-item__content" title={item.title}>
                             <SectionIcon class="content__icon" item={item as ShortcutItem} />
 
                             <Show when={largerThan("md")}>
                               <div class="content__title w-full px-1">
-                                <cds-tooltip class="inline-block w-full" align="bottom">
-                                  <span class="inline-block w-full truncate">{item.title}</span>
-                                  <cds-tooltip-content>{item.title}</cds-tooltip-content>
-                                </cds-tooltip>
+                                <span class="inline-block w-full truncate" title={item.title}>
+                                  {item.title}
+                                </span>
                               </div>
                             </Show>
                           </div>
@@ -240,6 +237,9 @@ export default function ShortcutGrid() {
             <div class="flex-auto overflow-auto">
               <Show when={currentSection()} keyed>
                 <div class="flex sticky top-0 z-10">
+                  <cds-button size="md" on:click={() => setViewMode("treemap")}>
+                    <Icon slot="icon" icon="carbon:arrow-left" />
+                  </cds-button>
                   <cds-search
                     ref={(el: HTMLElement) =>
                       setTimeout(() => el?.focus(), INTERACTIVE_INTERVAL.INSTANT)
@@ -251,9 +251,6 @@ export default function ShortcutGrid() {
                     value={searchValue()}
                     on:cds-search-input={(event: CustomEvent) => setSearchValue(event.detail.value)}
                   />
-                  <cds-button kind="secondary" size="md" on:click={() => setViewMode("treemap")}>
-                    <Icon slot="icon" icon="carbon:arrow-left" />
-                  </cds-button>
                 </div>
               </Show>
               <For
