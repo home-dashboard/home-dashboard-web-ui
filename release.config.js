@@ -3,7 +3,7 @@ export default {
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
     "@semantic-release/github",
-    "@semantic-release/git",
-    "@semantic-release/changelog"
+    "@semantic-release/changelog",
+    "@semantic-release/git"
   ]
 };
