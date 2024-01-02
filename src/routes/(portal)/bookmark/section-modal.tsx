@@ -29,8 +29,8 @@ export function SectionModal(
     isValid: isSectionFormValid,
     isSubmitting: isSectionFormSubmitting,
     reset: resetSectionForm
-  } = createForm<ShortcutSection>({
-    extend: validator<ShortcutSection>({
+  } = createForm({
+    extend: validator({
       schema: z.lazy(() => {
         const obj: ZodRawShape = {
           name: z.string().min(1)
@@ -46,7 +46,7 @@ export function SectionModal(
   createEffect(
     on(
       () => mergedProps.formData,
-      (data) => setSectionFormData({ ...data } as ShortcutSection)
+      (data) => setSectionFormData({ ...data })
     )
   );
 

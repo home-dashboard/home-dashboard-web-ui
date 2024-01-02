@@ -4,7 +4,6 @@ import {
   createSignal,
   JSX,
   mergeProps,
-  on,
   ParentProps,
   splitProps
 } from "solid-js";

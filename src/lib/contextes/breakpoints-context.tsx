@@ -1,10 +1,4 @@
-import {
-  children,
-  createContext,
-  createSignal,
-  FlowProps,
-  useContext as solidUseContext
-} from "solid-js";
+import { createContext, createSignal, FlowProps, useContext as solidUseContext } from "solid-js";
 import { Breakpoints } from "../observers";
 
 const [signal, setSignal] = createSignal(Breakpoints.breakpoint());
