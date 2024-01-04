@@ -136,7 +136,7 @@ export function BookmarkImportModal(
             </cds-file-uploader>
           }
         >
-          <div class="w-fit p-4 sticky z-10 top-0 backdrop-blur-md">
+          <div class="w-full box-border p-4 sticky z-10 top-0 backdrop-blur-md">
             <cds-inline-notification
               title="Please DO NOT close this window until the import is finished."
               subtitle="The progress bar below may help alleviate anxiety."
