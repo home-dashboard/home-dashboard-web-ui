@@ -20,16 +20,6 @@ jobs:
         with:
           fetch-depth: 0
       # setup web environment
-      - name: Setup PNPM Environment
-        uses: pnpm/action-setup@v2.2.4
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile # 显式设置安装时不更新 lockfile
-      - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
-        run: npm audit signatures
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
