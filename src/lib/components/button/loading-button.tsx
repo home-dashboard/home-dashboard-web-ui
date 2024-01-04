@@ -7,7 +7,7 @@ import {
   ParentProps,
   splitProps
 } from "solid-js";
-import { INLINE_LOADING_STATE } from "@carbon/web-components/es/components/inline-loading/defs";
+import { INLINE_LOADING_STATE } from "@carbon/web-components/es/components/inline-loading/defs.js";
 import type CDSButton from "@carbon/web-components/es/components/button/button";
 import { typeIsFunction, typeIsPromise } from "@siaikin/utils";
 
